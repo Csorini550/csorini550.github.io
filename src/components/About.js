@@ -174,10 +174,57 @@ class About extends HTMLElement {
         @media (max-width: 768px) {
           .about-content {
             flex-direction: column;
+            align-items: center;
+          }
+          
+          .about-text, .about-skills {
+            max-width: 100%;
+            width: 100%;
+            margin-bottom: 24px;
           }
           
           .section-header h2 {
             font-size: 1.8rem;
+          }
+        }
+        
+        @media (max-width: 480px) {
+          .about-section {
+            padding: 48px 0;
+          }
+          
+          .section-header {
+            margin-bottom: 32px;
+          }
+          
+          .section-header h2 {
+            font-size: 1.6rem;
+          }
+          
+          .section-header p {
+            font-size: 0.95rem;
+          }
+          
+          .about-text, .about-skills {
+            padding: 20px;
+          }
+          
+          .about-text h3, .about-skills h3 {
+            font-size: 1.4rem;
+            margin-bottom: 12px;
+          }
+          
+          .about-text p {
+            font-size: 0.95rem;
+            margin-bottom: 12px;
+          }
+          
+          .skill-item {
+            margin-bottom: 12px;
+          }
+          
+          .skill-name {
+            font-size: 0.9rem;
           }
         }
       </style>

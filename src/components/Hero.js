@@ -578,51 +578,50 @@ class Hero extends HTMLElement {
         }
         
         @media (max-width: 768px) {
-          .video-background video {
-            height: 100%;
-            width: auto;
-          }
-          
-          h1 {
-            font-size: 2.5rem;
-          }
-          
-          .hero-section {
-            flex-direction: column;
-            padding-top: 80px;
-            height: auto;
-            min-height: 100vh;
-          }
-          
           .hero-content {
-            max-width: 100%;
-            padding: 24px;
+            grid-template-columns: 1fr;
+            text-align: center;
+            gap: 3rem;
+          }
+          
+          .hero-visual {
+            order: -1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
           }
           
           .avatar-container {
-            width: 200px;
-            height: 200px;
+            width: 250px;
+            height: 250px;
+            margin: 0 auto;
           }
           
           .avatar-orbit {
-            width: 280px;
-            height: 280px;
-            top: -40px;
-            left: -40px;
+            width: 350px;
+            height: 350px;
+            top: -50px;
+            left: -50px;
           }
           
           .avatar-orbit:nth-of-type(2) {
-            width: 240px;
-            height: 240px;
-            top: -20px;
-            left: -20px;
+            width: 300px;
+            height: 300px;
+            top: -25px;
+            left: -25px;
           }
           
           .avatar-orbit:nth-of-type(3) {
-            width: 320px;
-            height: 320px;
-            top: -60px;
-            left: -60px;
+            width: 400px;
+            height: 400px;
+            top: -75px;
+            left: -75px;
+          }
+          
+          .avatar-background {
+            width: 250px;
+            height: 250px;
           }
         }
         
@@ -647,8 +646,8 @@ class Hero extends HTMLElement {
           }
           
           .avatar-container {
-            width: 180px;
-            height: 180px;
+            width: 200px;
+            height: 200px;
           }
           
           .tech-badge {
@@ -657,6 +656,32 @@ class Hero extends HTMLElement {
           
           .typewriter {
             font-size: 1.2rem;
+          }
+          
+          .avatar-orbit {
+            width: 280px;
+            height: 280px;
+            top: -40px;
+            left: -40px;
+          }
+          
+          .avatar-orbit:nth-of-type(2) {
+            width: 240px;
+            height: 240px;
+            top: -20px;
+            left: -20px;
+          }
+          
+          .avatar-orbit:nth-of-type(3) {
+            width: 320px;
+            height: 320px;
+            top: -60px;
+            left: -60px;
+          }
+          
+          .avatar-background {
+            width: 200px;
+            height: 200px;
           }
         }
       </style>

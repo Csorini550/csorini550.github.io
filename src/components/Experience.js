@@ -233,7 +233,7 @@ class Experience extends HTMLElement {
           }
           
           .timeline-content:before {
-            left: -10px;
+            left: 10px;
           }
           
           .timeline-item:nth-child(even) .timeline-date {
@@ -248,8 +248,8 @@ class Experience extends HTMLElement {
           }
           
           .timeline-item:nth-child(even) .timeline-content:before {
-            left: -10px;
             right: auto;
+            left: 10px;
           }
         }
         
@@ -284,7 +284,8 @@ class Experience extends HTMLElement {
             }
             
             .timeline-content {
-              padding: 16px 16px 16px 30px;
+              padding: 20px;
+              padding-left: 40px;
             }
             
             .timeline-content:before {
@@ -295,6 +296,26 @@ class Experience extends HTMLElement {
             
             .timeline-item:nth-child(even) .timeline-content:before {
               left: -16px;
+            }
+            
+            .timeline-content h3 {
+              font-size: 1.4rem;
+            }
+            
+            .timeline-content h4 {
+              font-size: 0.9rem;
+            }
+            
+            .timeline-content p {
+              font-size: 0.95rem;
+            }
+            
+            .achievement-highlight {
+              padding: 12px;
+            }
+            
+            .achievement-highlight p {
+              font-size: 0.9rem;
             }
             
             .university-logo {
