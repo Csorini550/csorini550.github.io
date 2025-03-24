@@ -260,7 +260,7 @@ class Experience extends HTMLElement {
           }
           
           .timeline:after {
-            left: 2px;
+            left: -5px;
           }
           
           .timeline-content {
@@ -279,9 +279,13 @@ class Experience extends HTMLElement {
             left: -18px;
           }
           
+          .timeline-date {
+            padding-left: 24px;
+          }
+          
           @media (max-width: 480px) {
             .timeline:after {
-              left: 2px;
+              left: -5px;
             }
             
             .timeline-content {
@@ -309,6 +313,10 @@ class Experience extends HTMLElement {
             
             .timeline-content p {
               font-size: 0.95rem;
+            }
+            
+            .timeline-date {
+              padding-left: 24px;
             }
             
             .achievement-highlight {
