@@ -347,9 +347,10 @@ class Hero extends HTMLElement {
           border: 1px solid rgba(8, 102, 223, 0.3);
         }
         
-        .tech-badge.meta img {
+        .tech-badge.meta svg {
           width: 100%;
           height: 100%;
+          filter: drop-shadow(0 0 2px rgba(8, 102, 255, 0.5));
         }
         
         .tech-badge.openai img {
@@ -839,7 +840,16 @@ class Hero extends HTMLElement {
                     <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg" alt="OpenAI">
                   </div>
                   <div class="tech-badge meta">
-                    <img src="src/images/meta.png" alt="Meta">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" width="100%" height="100%" aria-labelledby="metaTitle">
+                      <title id="metaTitle">Meta</title>
+                      <defs>
+                        <linearGradient id="meta-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                          <stop offset="0%" style="stop-color:#0866FF"/>
+                          <stop offset="100%" style="stop-color:#0080FF"/>
+                        </linearGradient>
+                      </defs>
+                      <path fill="url(#meta-gradient)" d="M400,130c-36.8,0-66.7,14.4-89.8,43.1c-19.3,24-28.4,52.9-27.4,86.6v67.4h-61.4c-5,0-9,4-9,9v68c0,5,4,9,9,9h61.4 v175.5c0,5,4,9,9,9h76.8c5,0,9-4,9-9V413.1h60.3c5,0,9-4,9-9v-68c0-5-4-9-9-9h-60.7v-57.4c0-13.9,1.5-22.2,4.4-27.8 c4.4-8.3,12.7-12.6,24.9-12.6h35.8c5,0,9-4,9-9v-63.1c0-5-4-9-9-9h-42.3V130z"/>
+                    </svg>
                   </div>
                 </div>
               </div>
