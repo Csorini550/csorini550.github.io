@@ -12,8 +12,8 @@ class Contact extends HTMLElement {
     this.retryCount = 0;
     
     // SendGrid configuration
-    this.useSendGrid = false; // Set to true to use SendGrid instead of EmailJS
-    this.sendGridAPIKey = "YOUR_SENDGRID_API_KEY"; // Replace with your actual SendGrid API key
+    this.useSendGrid = true; // Set to true to use SendGrid instead of EmailJS
+    this.sendGridAPIKey = "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"; // Replace with your actual SendGrid API key
   }
 
   connectedCallback() {
