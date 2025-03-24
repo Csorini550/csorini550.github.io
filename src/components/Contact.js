@@ -4,14 +4,68 @@ class Contact extends HTMLElement {
     super();
     this.attachShadow({ mode: 'open' });
     console.log('Contact component initialized');
+    this.emailJSLoaded = false;
+    this.emailServiceKey = "zxeSmFLK-CuHM_mKO";
+    this.serviceID = "service_eh0jpbf";
+    this.templateID = "template_pplvcfl";
+    this.maxRetries = 3;
+    this.retryCount = 0;
   }
 
   connectedCallback() {
     console.log('Contact component connected to DOM');
     this.render();
-    this.setupEventListeners();
     this.loadFontAwesome();
-    this.loadEmailJS();
+    
+    // Initialize email service with retry mechanism
+    this.initializeEmailService();
+  }
+
+  initializeEmailService() {
+    console.log(`Initializing email service (attempt ${this.retryCount + 1}/${this.maxRetries})`);
+    
+    // Check if EmailJS is already available (from main HTML)
+    if (typeof window.emailjs !== 'undefined') {
+      console.log("EmailJS found in global scope");
+      try {
+        window.emailjs.init(this.emailServiceKey);
+        this.emailJSLoaded = true;
+        console.log("EmailJS initialized successfully");
+        this.setupEventListeners();
+      } catch (error) {
+        console.error("Failed to initialize EmailJS:", error);
+        this.handleEmailJSInitFailure();
+      }
+    } else {
+      // Load EmailJS if not already available
+      this.loadEmailJS()
+        .then(() => {
+          console.log("EmailJS loaded and setup complete");
+          this.setupEventListeners();
+        })
+        .catch(error => {
+          console.error("Failed to load EmailJS:", error);
+          this.handleEmailJSInitFailure();
+        });
+    }
+  }
+
+  handleEmailJSInitFailure() {
+    this.retryCount++;
+    
+    if (this.retryCount < this.maxRetries) {
+      console.log(`Retrying EmailJS initialization in 2 seconds... (${this.retryCount}/${this.maxRetries})`);
+      setTimeout(() => this.initializeEmailService(), 2000);
+    } else {
+      console.error("Max retries reached. Email service unavailable.");
+      // Show error message in the contact form
+      const statusMessage = this.shadowRoot.querySelector('#status-message');
+      if (statusMessage) {
+        this.showStatus(statusMessage, 'Email service is not available at the moment. Please contact me directly at csorini13@gmail.com.', 'error');
+      }
+      // Still set up event listeners for form validation and provide fallback info
+      this.setupEventListeners();
+    }
   }
 
   loadFontAwesome() {
@@ -26,31 +80,95 @@ class Contact extends HTMLElement {
   }
 
   loadEmailJS() {
-    console.log('Attempting to load EmailJS');
+    console.log('Loading EmailJS script');
     
-    // Create a script element for EmailJS using the latest SDK
-    const script = document.createElement('script');
-    script.src = 'https://cdn.emailjs.com/sdk/2.6.4/email.min.js';
-    script.type = 'text/javascript';
-    
-    // Initialize EmailJS when the script is loaded
-    script.onload = () => {
-      try {
-        // Initialize with your EmailJS public key
-        emailjs.init("zxeSmFLK-CuHM_mKO");
-        console.log("EmailJS loaded and initialized successfully with public key: zxeSmFLK-CuHM_mKO");
-      } catch (error) {
-        console.error("Error initializing EmailJS:", error);
+    // Return a promise to handle loading status
+    return new Promise((resolve, reject) => {
+      // Check if EmailJS is already loaded
+      if (typeof window.emailjs !== 'undefined') {
+        console.log("EmailJS already available");
+        try {
+          window.emailjs.init(this.emailServiceKey);
+          this.emailJSLoaded = true;
+          resolve();
+          return;
+        } catch (error) {
+          console.error("Error initializing existing EmailJS:", error);
+          // Continue to load fresh script
+        }
       }
-    };
-    
-    // Add error handling for script loading
-    script.onerror = (error) => {
-      console.error("Failed to load EmailJS script", error);
-    };
-    
-    // Append it to document head instead of shadow DOM for global availability
-    document.head.appendChild(script);
+      
+      // Create a script element for EmailJS
+      const script = document.createElement('script');
+      script.src = 'https://cdn.emailjs.com/sdk/2.6.4/email.min.js';
+      script.type = 'text/javascript';
+      script.async = true;
+      
+      // Initialize EmailJS when the script is loaded
+      script.onload = () => {
+        try {
+          // Add a small delay to ensure the script is fully processed
+          setTimeout(() => {
+            if (typeof window.emailjs === 'undefined') {
+              console.error("EmailJS script loaded but emailjs is undefined");
+              reject(new Error("EmailJS not defined after script load"));
+              return;
+            }
+            
+            window.emailjs.init(this.emailServiceKey);
+            console.log("EmailJS loaded and initialized successfully");
+            this.emailJSLoaded = true;
+            resolve();
+          }, 500);
+        } catch (error) {
+          console.error("Error initializing EmailJS:", error);
+          reject(error);
+        }
+      };
+      
+      // Add error handling for script loading
+      script.onerror = (error) => {
+        console.error("Failed to load EmailJS script", error);
+        reject(error);
+      };
+      
+      // Set a timeout to reject the promise if loading takes too long
+      const timeoutId = setTimeout(() => {
+        reject(new Error("EmailJS script loading timed out"));
+      }, 10000); // 10 seconds timeout
+      
+      // Clear timeout when script loads or errors
+      script.onload = () => {
+        clearTimeout(timeoutId);
+        try {
+          // Add a small delay to ensure the script is fully processed
+          setTimeout(() => {
+            if (typeof window.emailjs === 'undefined') {
+              console.error("EmailJS script loaded but emailjs is undefined");
+              reject(new Error("EmailJS not defined after script load"));
+              return;
+            }
+            
+            window.emailjs.init(this.emailServiceKey);
+            console.log("EmailJS loaded and initialized successfully");
+            this.emailJSLoaded = true;
+            resolve();
+          }, 500);
+        } catch (error) {
+          console.error("Error initializing EmailJS:", error);
+          reject(error);
+        }
+      };
+      
+      script.onerror = (error) => {
+        clearTimeout(timeoutId);
+        console.error("Failed to load EmailJS script", error);
+        reject(error);
+      };
+      
+      // Append to document head for global availability
+      document.head.appendChild(script);
+    });
   }
 
   render() {
@@ -159,6 +277,58 @@ class Contact extends HTMLElement {
           background-color: #2667cc;
           transform: translateY(-2px);
           box-shadow: 0 4px 8px rgba(0,0,0,0.12);
+        }
+        
+        #status-message {
+          margin-top: 15px;
+          padding: 12px;
+          border-radius: 8px;
+          display: none;
+          font-weight: 500;
+          margin-bottom: 16px;
+        }
+        
+        .success {
+          background-color: #d4edda;
+          color: #155724;
+          border: 1px solid #c3e6cb;
+        }
+        
+        .error {
+          background-color: #f8d7da;
+          color: #721c24;
+          border: 1px solid #f5c6cb;
+        }
+        
+        .sending-overlay {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-color: rgba(255,255,255,0.8);
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          z-index: 10;
+          border-radius: 8px;
+          display: none;
+        }
+        
+        .sending-spinner {
+          width: 40px;
+          height: 40px;
+          border: 4px solid #f3f3f3;
+          border-top: 4px solid #3a86ff;
+          border-radius: 50%;
+          animation: spin 1s linear infinite;
+          margin-bottom: 10px;
+        }
+        
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
         }
         
         .contact-info {
@@ -315,26 +485,32 @@ class Contact extends HTMLElement {
           </div>
           <div class="contact-content">
             <div class="contact-form" data-aos="fade-right">
-              <form id="contact-form">
-                <div class="form-group">
-                  <label for="name">Name</label>
-                  <input type="text" id="name" name="name" required>
+              <div id="status-message"></div>
+              <div style="position: relative;">
+                <div class="sending-overlay" id="sending-overlay">
+                  <div class="sending-spinner"></div>
+                  <p>Sending your message...</p>
                 </div>
-                <div class="form-group">
-                  <label for="email">Email</label>
-                  <input type="email" id="email" name="email" required>
-                </div>
-                <div class="form-group">
-                  <label for="subject">Subject</label>
-                  <input type="text" id="subject" name="subject" required>
-                </div>
-                <div class="form-group">
-                  <label for="message">Message</label>
-                  <textarea id="message" name="message" rows="5" required></textarea>
-                </div>
-                <button type="submit" class="btn">Send Message</button>
-              </form>
-              <div id="status-message" style="margin-top: 15px; padding: 10px; display: none;"></div>
+                <form id="contact-form">
+                  <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="subject">Subject</label>
+                    <input type="text" id="subject" name="subject" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="message">Message</label>
+                    <textarea id="message" name="message" rows="5" required></textarea>
+                  </div>
+                  <button type="submit" class="btn">Send Message</button>
+                </form>
+              </div>
             </div>
             <div class="contact-info" data-aos="fade-left">
               <div class="avatar-container">
@@ -391,33 +567,61 @@ class Contact extends HTMLElement {
         submitButton.textContent = 'Sending...';
         submitButton.disabled = true;
         
+        // Show sending overlay
+        const sendingOverlay = this.shadowRoot.querySelector('#sending-overlay');
+        if (sendingOverlay) {
+          sendingOverlay.style.display = 'flex';
+        }
+        
         // Display status message
         const statusMessage = this.shadowRoot.querySelector('#status-message');
-        
-        // Gather form data
-        const formData = {
-          name: form.querySelector('#name').value,
-          email: form.querySelector('#email').value,
-          subject: form.querySelector('#subject').value,
-          message: form.querySelector('#message').value,
-          to_email: 'csorini13@gmail.com'
-        };
-        
-        console.log("Attempting to send email with data:", formData);
-        
-        // Check if emailjs is accessible in the global scope
-        if (typeof emailjs === 'undefined') {
-          console.error("EmailJS is not loaded properly. emailjs is undefined");
-          this.showStatus(statusMessage, 'Sorry, the email service is not loaded properly. Please try again later or contact me directly at csorini13@gmail.com.', 'error');
+        if (!statusMessage) {
+          console.error("Status message element not found");
           submitButton.textContent = originalButtonText;
           submitButton.disabled = false;
+          if (sendingOverlay) sendingOverlay.style.display = 'none';
           return;
         }
         
-        console.log("EmailJS is available in global scope:", emailjs);
-        
-        // Send email using EmailJS with the provided service ID and template ID
-        emailjs.send('service_eh0jpbf', 'template_pplvcfl', formData)
+        // Verify EmailJS is ready
+        this.verifyEmailService()
+          .then(isReady => {
+            if (!isReady) {
+              throw new Error("Email service is not ready");
+            }
+            
+            // Validate form data
+            const name = form.querySelector('#name').value.trim();
+            const email = form.querySelector('#email').value.trim();
+            const subject = form.querySelector('#subject').value.trim();
+            const message = form.querySelector('#message').value.trim();
+            
+            if (!name || !email || !subject || !message) {
+              this.showStatus(statusMessage, 'Please fill out all fields.', 'error');
+              return Promise.reject(new Error("Form validation failed"));
+            }
+            
+            // Validate email format
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+              this.showStatus(statusMessage, 'Please enter a valid email address.', 'error');
+              return Promise.reject(new Error("Invalid email format"));
+            }
+            
+            // Gather form data
+            const formData = {
+              name: name,
+              email: email,
+              subject: subject,
+              message: message,
+              to_email: 'csorini13@gmail.com'
+            };
+            
+            console.log("Sending email with data:", formData);
+            
+            // Send email using EmailJS
+            return window.emailjs.send(this.serviceID, this.templateID, formData);
+          })
           .then((response) => {
             console.log("Email sent successfully:", response);
             // Show success message
@@ -425,14 +629,26 @@ class Contact extends HTMLElement {
             form.reset();
           })
           .catch((error) => {
-            console.error('Email send error:', error);
-            console.error('Error details:', JSON.stringify(error));
-            this.showStatus(statusMessage, 'Sorry, there was an error sending your message. Please try again or contact me directly at csorini13@gmail.com.', 'error');
+            console.error('Email error:', error);
+            
+            // Provide specific error message based on the error type
+            let errorMessage = 'Sorry, there was an error sending your message. Please try again or contact me directly at csorini13@gmail.com.';
+            
+            if (error.message === "Email service is not ready") {
+              errorMessage = 'Email service is not available at the moment. Please contact me directly at csorini13@gmail.com.';
+            } else if (error.message === "Form validation failed" || error.message === "Invalid email format") {
+              // Validation errors already handled
+              return;
+            }
+            
+            this.showStatus(statusMessage, errorMessage, 'error');
           })
           .finally(() => {
             // Reset button state
             submitButton.textContent = originalButtonText;
             submitButton.disabled = false;
+            // Hide sending overlay
+            if (sendingOverlay) sendingOverlay.style.display = 'none';
           });
       });
     } else {
@@ -440,19 +656,72 @@ class Contact extends HTMLElement {
     }
   }
   
+  // New method to verify EmailJS is ready
+  verifyEmailService() {
+    return new Promise((resolve) => {
+      // If EmailJS was already loaded successfully
+      if (this.emailJSLoaded && typeof window.emailjs !== 'undefined') {
+        console.log("EmailJS verified as ready");
+        resolve(true);
+        return;
+      }
+      
+      // If EmailJS exists but wasn't marked as loaded, try to initialize it
+      if (typeof window.emailjs !== 'undefined') {
+        try {
+          window.emailjs.init(this.emailServiceKey);
+          this.emailJSLoaded = true;
+          console.log("EmailJS initialized during verification");
+          resolve(true);
+        } catch (error) {
+          console.error("EmailJS initialization failed during verification:", error);
+          resolve(false);
+        }
+        return;
+      }
+      
+      // If EmailJS doesn't exist, try loading it one more time
+      this.loadEmailJS()
+        .then(() => {
+          console.log("EmailJS loaded during verification");
+          resolve(true);
+        })
+        .catch(error => {
+          console.error("EmailJS loading failed during verification:", error);
+          resolve(false);
+        });
+    });
+  }
+  
   // Helper method to show status messages
   showStatus(element, message, type) {
-    element.textContent = message;
+    // Clear any existing content
+    element.textContent = '';
+    
+    // Create icon element
+    const icon = document.createElement('i');
+    icon.className = type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-circle';
+    icon.style.marginRight = '8px';
+    
+    // Create text node with message
+    const text = document.createTextNode(message);
+    
+    // Add icon and text to element
+    element.appendChild(icon);
+    element.appendChild(text);
+    
+    // Set appropriate class and display
+    element.className = type;
     element.style.display = 'block';
     
+    // Scroll to status message
+    element.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    
+    // If it's a success message, hide it after 5 seconds
     if (type === 'success') {
-      element.style.backgroundColor = '#d4edda';
-      element.style.color = '#155724';
-      element.style.border = '1px solid #c3e6cb';
-    } else {
-      element.style.backgroundColor = '#f8d7da';
-      element.style.color = '#721c24';
-      element.style.border = '1px solid #f5c6cb';
+      setTimeout(() => {
+        element.style.display = 'none';
+      }, 5000);
     }
   }
 }
