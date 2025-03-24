@@ -603,7 +603,10 @@ class Contact extends HTMLElement {
               email: email,
               subject: subject,
               message: message,
-              to_email: 'csorini13@gmail.com'
+              to_name: "Christopher Sorini",
+              to_email: 'csorini13@gmail.com',
+              from_name: name,
+              reply_to: email
             };
             
             console.log("Sending email with data:", formData);
