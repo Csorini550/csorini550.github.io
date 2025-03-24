@@ -8,7 +8,7 @@
 
 // English intro (your voice)
 const englishIntro = `
-Hi there! Welcome to my portfolio. I'm Christopher Sorini, a software engineer passionate about building great web experiences.
+Hi there! Welcome to my portfolio. I'm Christopher T. Sorini, a software engineer passionate about building great web experiences.
 
 Let me introduce you to one of my AI projects called PipeCat AI, which can transform text to speech in different languages while maintaining voice characteristics.
 `;

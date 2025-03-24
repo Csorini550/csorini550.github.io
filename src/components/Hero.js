@@ -358,7 +358,7 @@ class Hero extends HTMLElement {
         .hero-subtitle {
           font-size: 1.2rem;
           margin-bottom: 24px;
-          color: #8338ec;
+          color: #bfa2ff;
           letter-spacing: 1px;
           transform: translateY(30px);
           opacity: 0;
@@ -698,7 +698,7 @@ class Hero extends HTMLElement {
         
         <div class="hero-content">
           <div class="hero-text">
-            <h1>Christopher <span class="highlight">Sorini</span></h1>
+            <h1>Christopher <span class="highlight">T. Sorini</span></h1>
             <p class="hero-subtitle">Software Engineer | Problem Solver | Outdoors Enthusiast</p>
             <p class="typewriter" id="typewriter"></p>
             <div class="cta-buttons">
@@ -733,7 +733,7 @@ class Hero extends HTMLElement {
               </div>
               
               <div class="avatar-wrapper" id="avatar-wrapper">
-                <img class="profile-image" src="images/profile-placeholder.svg" alt="Christopher Sorini">
+                <img class="profile-image" src="images/profile-placeholder.svg" alt="Christopher T. Sorini">
                 <div class="tech-badges">
                   <div class="tech-badge js">
                     <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/javascript/javascript-original.svg" alt="JavaScript">

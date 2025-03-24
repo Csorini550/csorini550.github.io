@@ -9,7 +9,7 @@ class AIBioAssistant extends HTMLElement {
     // In a real implementation, this would be more extensive and possibly loaded from an external source
     this.knowledgeBase = {
       personal: {
-        name: "Christopher Sorini",
+        name: "Christopher T. Sorini",
         location: "Chicago, IL",
         education: "Master's in Computer Science, University of Illinois",
         interests: ["Artificial Intelligence", "Web Development", "Voice Technology", "Call Center Solutions"]
@@ -628,7 +628,7 @@ class AIBioAssistant extends HTMLElement {
     
     // Handle greetings
     if (this.containsAny(lowercaseQuestion, ['hi', 'hello', 'hey', 'greetings'])) {
-      return "Hello! I'm happy to tell you all about Christopher Sorini's background, skills, and experiences. What specific aspect would you like to know about?";
+      return "Hello! I'm happy to tell you all about Christopher T. Sorini's background, skills, and experiences. What specific aspect would you like to know about?";
     }
     
     // Handle goodbyes

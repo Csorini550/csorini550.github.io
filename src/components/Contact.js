@@ -7,7 +7,7 @@ class Contact extends HTMLElement {
     this.formError = false;
     this.errorMessage = '';
     this.formSuccess = false;
-    this.recipientName = 'Christopher Sorini'; // Default recipient name
+    this.recipientName = 'Christopher T. Sorini'; // Default recipient name
     this.recipientEmail = 'contact@example.com'; // Default recipient email
     
     this.attachShadow({ mode: 'open' });
@@ -605,7 +605,7 @@ class Contact extends HTMLElement {
             </div>
             <div class="contact-info" data-aos="fade-left">
               <div class="avatar-container">
-                <img src="images/Image (3).jpeg" alt="Christopher Sorini" />
+                <img src="images/Image (3).jpeg" alt="Christopher T. Sorini" />
               </div>
               <div class="info-container">
                 <div class="info-item">

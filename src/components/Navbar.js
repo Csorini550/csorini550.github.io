@@ -186,7 +186,7 @@ class Navbar extends HTMLElement {
       <nav class="navbar">
         <div class="navbar-container">
           <div class="logo">
-            <a href="#hero">Christopher <span>Sorini</span></a>
+            <a href="#hero">Christopher <span>T. Sorini</span></a>
           </div>
           <div class="nav-links">
             <a href="#about">My Journey</a>

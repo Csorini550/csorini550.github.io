@@ -253,7 +253,7 @@ class Footer extends HTMLElement {
         <div class="container">
           <div class="footer-content">
             <div class="footer-logo">
-              <a href="#hero">Christopher <span>Sorini</span></a>
+              <a href="#hero">Christopher <span>T. Sorini</span></a>
             </div>
             <div class="footer-links">
               <a href="#about">My Journey</a>
@@ -281,7 +281,7 @@ class Footer extends HTMLElement {
             </div>
           </div>
           <div class="footer-bottom">
-            <p>&copy; 2023 Christopher Sorini. All rights reserved.</p>
+            <p>&copy; 2023 Christopher T. Sorini. All rights reserved.</p>
           </div>
         </div>
       </footer>
