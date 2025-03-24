@@ -325,6 +325,51 @@ class Hero extends HTMLElement {
           animation: techFloat 8s ease-in-out infinite 0.5s;
         }
         
+        .tech-badge.openai {
+          width: 55px;
+          height: 55px;
+          top: -15%;
+          left: 50%;
+          transform: translateX(-50%);
+          animation: techGentlePulse 5s ease-in-out infinite;
+          background: rgba(10, 10, 10, 0.7);
+        }
+        
+        .tech-badge.llama {
+          width: 55px;
+          height: 55px;
+          bottom: -15%;
+          left: 50%;
+          transform: translateX(-50%);
+          animation: techGentlePulse 5s ease-in-out infinite 1s;
+          background: rgba(0, 102, 255, 0.1);
+          padding: 6px;
+          border: 1px solid rgba(0, 122, 255, 0.3);
+        }
+        
+        .tech-badge.llama svg {
+          width: 100%;
+          height: 100%;
+        }
+        
+        .tech-badge.openai img {
+          width: 80%;
+          height: 80%;
+          filter: brightness(1.1);
+        }
+        
+        @keyframes techGentlePulse {
+          0% {
+            transform: translateX(-50%) scale(1);
+          }
+          50% {
+            transform: translateX(-50%) scale(1.05);
+          }
+          100% {
+            transform: translateX(-50%) scale(1);
+          }
+        }
+        
         @keyframes techFloat {
           0% {
             transform: translateY(0) scale(1);
@@ -590,11 +635,12 @@ class Hero extends HTMLElement {
             justify-content: center;
             align-items: center;
             width: 100%;
+            margin-top: 30px;
           }
           
           .avatar-container {
-            width: 250px;
-            height: 250px;
+            width: 200px;
+            height: 200px;
             margin: 0 auto;
           }
           
@@ -623,6 +669,10 @@ class Hero extends HTMLElement {
             width: 250px;
             height: 250px;
           }
+          
+          .tech-badge {
+            transform: scale(0.7);
+          }
         }
         
         @media (max-width: 480px) {
@@ -645,13 +695,51 @@ class Hero extends HTMLElement {
             box-sizing: border-box;
           }
           
+          .hero-visual {
+            margin-top: 50px;
+          }
+          
           .avatar-container {
             width: 200px;
             height: 200px;
           }
           
           .tech-badge {
-            transform: scale(0.8);
+            transform: scale(0.6);
+          }
+          
+          .tech-badge.js {
+            width: 40px;
+            height: 40px;
+          }
+          
+          .tech-badge.react {
+            width: 50px;
+            height: 50px;
+          }
+          
+          .tech-badge.python {
+            width: 45px;
+            height: 45px;
+          }
+          
+          .tech-badge.flask {
+            width: 35px;
+            height: 35px;
+          }
+          
+          .tech-badge.openai {
+            width: 45px;
+            height: 45px;
+            top: -15%;
+            animation: techGentlePulse 5s ease-in-out infinite;
+          }
+          
+          .tech-badge.llama {
+            width: 45px;
+            height: 45px;
+            bottom: -15%;
+            animation: techGentlePulse 5s ease-in-out infinite 1s;
           }
           
           .typewriter {
@@ -688,7 +776,7 @@ class Hero extends HTMLElement {
       
       <section id="hero" class="hero-section">
         <div class="video-background">
-          <video autoplay muted loop playsinline id="chicago-video">
+          <video autoplay muted loop playsinline disablePictureInPicture disableRemotePlayback id="chicago-video">
             <slot name="video-source"></slot>
           </video>
           <div class="video-overlay"></div>
@@ -746,6 +834,21 @@ class Hero extends HTMLElement {
                   </div>
                   <div class="tech-badge flask">
                     <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/flask/flask-original.svg" alt="Flask">
+                  </div>
+                  <div class="tech-badge openai">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg" alt="OpenAI">
+                  </div>
+                  <div class="tech-badge llama">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%" aria-labelledby="llamaTitle">
+                      <title id="llamaTitle">Meta Llama 3</title>
+                      <defs>
+                        <linearGradient id="llama-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                          <stop offset="0%" style="stop-color:#0066FF"/>
+                          <stop offset="100%" style="stop-color:#00CCFF"/>
+                        </linearGradient>
+                      </defs>
+                      <path fill="url(#llama-gradient)" d="M395.51,256.19c-1.41-5.09-3.92-10.36-7.17-15.15a69.32,69.32,0,0,0-35.2-142H156.36a69.26,69.26,0,0,0-69.19,69.19v80.69c0,1.3.06,2.58.18,3.84a96.48,96.48,0,0,0,45.35,182.69H376.35a86.87,86.87,0,0,0,19.16-171.27ZM353.14,139.07a29.31,29.31,0,1,1-29.31,29.31A29.34,29.34,0,0,1,353.14,139.07Zm-194,0a29.31,29.31,0,1,1-29.32,29.31A29.34,29.34,0,0,1,159.1,139.07Z"/>
+                    </svg>
                   </div>
                 </div>
               </div>

@@ -18,8 +18,8 @@
   <circle cx="100" cy="100" r="90" fill="url(#grad2)" />
   
   <!-- Abstract Geometric Design -->
-  <path d="M100,30 L160,80 L130,160 L70,160 L40,80 Z" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="2" />
-  <circle cx="100" cy="100" r="40" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="2" />
+  <path d="M100,35 L155,65 L155,135 L100,165 L45,135 L45,65 Z" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="2" />
+  <circle cx="100" cy="100" r="45" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="2" />
   
   <!-- Initials -->
   <text x="100" y="115" font-family="Arial, sans-serif" font-size="40" font-weight="bold" fill="white" text-anchor="middle">CTS</text>

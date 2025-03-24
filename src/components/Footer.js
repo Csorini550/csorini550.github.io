@@ -273,7 +273,6 @@ class Footer extends HTMLElement {
             <div class="footer-links-section">
               <h3>Explore</h3>
               <div class="footer-links">
-                <a href="#hero">Home</a>
                 <a href="#about">About</a>
                 <a href="#ai-tools">AI Tools</a>
                 <a href="#interests">Interests</a>

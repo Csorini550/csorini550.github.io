@@ -230,8 +230,8 @@ class About extends HTMLElement {
       </style>
       
       <section id="about" class="about-section">
-        <video class="video-bg" autoplay muted loop playsinline>
-          <source src="/src/images/chicago.mp4" type="video/mp4">
+        <video class="video-bg" autoplay muted loop playsinline disablePictureInPicture disableRemotePlayback>
+          <source src="src/images/chicago.mp4" type="video/mp4">
         </video>
         <div class="video-overlay"></div>
         <div class="container">

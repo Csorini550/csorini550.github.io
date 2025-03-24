@@ -452,17 +452,33 @@ class Contact extends HTMLElement {
         
         .connect-message {
           margin: 24px 0;
-          padding: 16px;
-          background-color: #f8f9fb;
+          padding: 20px;
+          background: linear-gradient(to right, #f8f9fb, #f0f5ff);
           border-left: 4px solid #3a86ff;
           border-radius: 8px;
-          color: #555;
-          font-size: 1.05rem;
-          line-height: 1.5;
+          color: #444;
+          font-size: 1.1rem;
+          line-height: 1.6;
+          box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+          width: calc(100% + 30px);
+          margin-right: -30px;
+          position: relative;
+          z-index: 1;
+          transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .connect-message:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 4px 8px rgba(0,0,0,0.12);
         }
         
         .connect-message strong {
           color: #3a86ff;
+          font-weight: 600;
+        }
+        
+        .connect-message p {
+          margin: 0;
         }
         
         .social-links {
@@ -543,6 +559,7 @@ class Contact extends HTMLElement {
         
         .info-container {
           max-width: calc(100% - 130px);
+          position: relative;
         }
         
         .visually-hidden {
@@ -582,6 +599,19 @@ class Contact extends HTMLElement {
           
           .info-container {
             max-width: calc(100% - 100px);
+          }
+          
+          .connect-message {
+            width: calc(100% + 50px);
+            margin-right: -50px;
+            padding: 18px;
+            margin-bottom: 30px;
+          }
+          
+          .avatar-container {
+            bottom: -15px;
+            width: 100px;
+            height: 100px;
           }
           
           .social-links a {

@@ -270,6 +270,33 @@ img {
     left: 50%;
     transform: translate(-50%, -50%);
     object-fit: cover;
+    outline: none;
+}
+
+/* Hide video controls - comprehensive approach */
+video::-webkit-media-controls,
+video::-webkit-media-controls-panel,
+video::-webkit-media-controls-play-button,
+video::-webkit-media-controls-start-playback-button,
+video::-webkit-media-controls-enclosure,
+video::-webkit-media-controls-overlay-enclosure,
+video::-webkit-media-controls-overlay-play-button {
+    display: none !important;
+    -webkit-appearance: none !important;
+    opacity: 0 !important;
+}
+
+video::-moz-media-controls,
+video::-moz-media-controls-panel,
+video::-moz-media-controls-play-button,
+video::-moz-media-controls-start-playback-button {
+    display: none !important;
+    opacity: 0 !important;
+}
+
+video {
+    object-fit: cover;
+    outline: none !important;
 }
 
 .video-overlay {
@@ -1445,11 +1472,13 @@ code {
 /* Video controls styling */
 .video-container video::-webkit-media-controls-panel {
     background-color: rgba(0, 0, 0, 0.5);
+    display: none !important;
 }
 
 .video-container video::-webkit-media-controls-play-button {
     background-color: var(--primary-color);
     border-radius: 50%;
+    display: none !important;
 }
 
 /* Ensure project images maintain the same aspect ratio when videos aren't available */
