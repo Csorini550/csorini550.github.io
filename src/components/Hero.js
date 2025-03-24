@@ -293,12 +293,14 @@ class Hero extends HTMLElement {
           transform: scale(1.2);
         }
         
-        .tech-badge.js {
+        .tech-badge.nvidia {
           width: 50px;
           height: 50px;
           top: 10%;
           left: -15%;
           animation: techFloat 5s ease-in-out infinite;
+          background: rgba(118, 185, 0, 0.15);
+          border: 1px solid rgba(118, 185, 0, 0.3);
         }
         
         .tech-badge.react {
@@ -709,7 +711,7 @@ class Hero extends HTMLElement {
             transform: scale(0.6);
           }
           
-          .tech-badge.js {
+          .tech-badge.nvidia {
             width: 40px;
             height: 40px;
           }
@@ -824,8 +826,8 @@ class Hero extends HTMLElement {
               <div class="avatar-wrapper" id="avatar-wrapper">
                 <img class="profile-image" src="src/images/profile-placeholder.svg" alt="Christopher T. Sorini">
                 <div class="tech-badges">
-                  <div class="tech-badge js">
-                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/javascript/javascript-original.svg" alt="JavaScript">
+                  <div class="tech-badge nvidia">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nvidia/nvidia-original.svg" alt="NVIDIA">
                   </div>
                   <div class="tech-badge react">
                     <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/react/react-original.svg" alt="React">
