@@ -19,6 +19,7 @@ class Experience extends HTMLElement {
         
         .experience-section {
           padding: 64px 0;
+          
         }
         
         .container {
@@ -259,7 +260,7 @@ class Experience extends HTMLElement {
           }
           
           .timeline:after {
-            left: 10px;
+            left: 2px;
           }
           
           .timeline-content {
@@ -280,7 +281,7 @@ class Experience extends HTMLElement {
           
           @media (max-width: 480px) {
             .timeline:after {
-              left: 8px;
+              left: 2px;
             }
             
             .timeline-content {
