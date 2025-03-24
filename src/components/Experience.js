@@ -225,6 +225,7 @@ class Experience extends HTMLElement {
           .timeline-content {
             width: 100%;
             margin-left: 0;
+            padding-left: 45px;
           }
           
           .timeline:after {
@@ -232,7 +233,7 @@ class Experience extends HTMLElement {
           }
           
           .timeline-content:before {
-            left: -36px;
+            left: -10px;
           }
           
           .timeline-item:nth-child(even) .timeline-date {
@@ -243,10 +244,11 @@ class Experience extends HTMLElement {
           .timeline-item:nth-child(even) .timeline-content {
             width: 100%;
             margin-right: 0;
+            padding-left: 45px;
           }
           
           .timeline-item:nth-child(even) .timeline-content:before {
-            left: -36px;
+            left: -10px;
             right: auto;
           }
         }
@@ -254,6 +256,54 @@ class Experience extends HTMLElement {
         @media (max-width: 768px) {
           .section-header h2 {
             font-size: 1.8rem;
+          }
+          
+          .timeline:after {
+            left: 10px;
+          }
+          
+          .timeline-content {
+            box-sizing: border-box;
+            padding-left: 35px;
+          }
+          
+          .timeline-content:before {
+            width: 16px;
+            height: 16px;
+            left: -18px;
+            top: 20px;
+          }
+          
+          .timeline-item:nth-child(even) .timeline-content:before {
+            left: -18px;
+          }
+          
+          @media (max-width: 480px) {
+            .timeline:after {
+              left: 8px;
+            }
+            
+            .timeline-content {
+              padding: 16px 16px 16px 30px;
+            }
+            
+            .timeline-content:before {
+              left: -16px;
+              width: 14px;
+              height: 14px;
+            }
+            
+            .timeline-item:nth-child(even) .timeline-content:before {
+              left: -16px;
+            }
+            
+            .university-logo {
+              max-width: 120px;
+            }
+            
+            .university-mascot {
+              max-width: 80px;
+            }
           }
         }
       </style>

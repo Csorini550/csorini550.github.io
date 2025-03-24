@@ -634,6 +634,16 @@ class Hero extends HTMLElement {
           .cta-buttons {
             flex-direction: column;
             gap: 16px;
+            width: 100%;
+            max-width: 280px;
+            margin-left: auto;
+            margin-right: auto;
+            align-items: center;
+          }
+          
+          .btn {
+            width: 100%;
+            box-sizing: border-box;
           }
           
           .avatar-container {
