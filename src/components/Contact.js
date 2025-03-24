@@ -605,6 +605,7 @@ class Contact extends HTMLElement {
               message: message,
               to_name: "Christopher Sorini",
               to_email: 'csorini13@gmail.com',
+              recipient: 'csorini13@gmail.com',
               from_name: name,
               reply_to: email
             };
