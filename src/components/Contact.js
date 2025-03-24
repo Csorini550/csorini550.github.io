@@ -612,7 +612,7 @@ class Contact extends HTMLElement {
             console.log("Sending email with data:", formData);
             
             // Send email using EmailJS - make sure we use the send method correctly
-            return window.emailjs.send(this.serviceID, this.templateID, formData, this.emailServiceKey);
+            return window.emailjs.send(this.serviceID, this.templateID, formData);
           })
           .then((response) => {
             console.log("Email sent successfully:", response);

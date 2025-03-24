@@ -184,7 +184,7 @@
             submitButton.textContent = 'Sending...';
             
             // Send email using EmailJS - Make sure to include the user ID as the 4th parameter
-            emailjs.send('service_eh0jpbf', 'template_pplvcfl', data, 'zxeSmFLK-CuHM_mKO')
+            emailjs.send('service_eh0jpbf', 'template_pplvcfl', data)
                 .then(function(response) {
                     debugLog('Email sent successfully! Response: ' + JSON.stringify(response));
                     showStatus('Email sent successfully!', 'success');
