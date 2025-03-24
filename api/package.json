@@ -1,0 +1,12 @@
+{
+  "name": "personal-website-api",
+  "version": "1.0.0",
+  "description": "API functions for Christopher Sorini's personal website",
+  "main": "send-email.js",
+  "dependencies": {
+    "@sendgrid/mail": "^7.7.0"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+} 

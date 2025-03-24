@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SendGrid Debug Tool</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .container {
+            display: flex;
+            gap: 20px;
+        }
+        .form-panel {
+            flex: 1;
+        }
+        .debug-panel {
+            flex: 1;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow: auto;
+            max-height: 600px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, textarea, select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-family: inherit;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #3a86ff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        button:hover {
+            background-color: #2a76ef;
+        }
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        .status {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 4px;
+            display: none;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .debug-entry {
+            margin-bottom: 10px;
+            padding: 8px;
+            border-radius: 4px;
+        }
+        .debug-info {
+            background-color: #e3f2fd;
+            border: 1px solid #90caf9;
+        }
+        .debug-error {
+            background-color: #ffebee;
+            border: 1px solid #ffcdd2;
+        }
+        .debug-success {
+            background-color: #e8f5e9;
+            border: 1px solid #a5d6a7;
+        }
+        pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            overflow-x: auto;
+            background-color: #f8f9fa;
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #eaecef;
+        }
+        .tabs {
+            display: flex;
+            margin-bottom: 10px;
+        }
+        .tab {
+            padding: 8px 16px;
+            cursor: pointer;
+            border: 1px solid #ddd;
+            border-bottom: none;
+            border-radius: 4px 4px 0 0;
+            margin-right: 5px;
+        }
+        .tab.active {
+            background-color: #f5f5f5;
+            font-weight: bold;
+        }
+        .tab-content {
+            display: none;
+            padding: 15px;
+            background-color: #f5f5f5;
+            border-radius: 0 4px 4px 4px;
+            border: 1px solid #ddd;
+        }
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <h1>SendGrid Email Debugging Tool</h1>
+    <p>This tool helps you diagnose issues with your SendGrid email implementation.</p>
+    
+    <div class="container">
+        <div class="form-panel">
+            <div class="tabs">
+                <div class="tab active" data-tab="standard">Standard Format</div>
+                <div class="tab" data-tab="advanced">Advanced Format</div>
+            </div>
+            
+            <div class="tab-content active" id="standard-tab">
+                <form id="standard-form">
+                    <div class="form-group">
+                        <label for="name">From Name</label>
+                        <input type="text" id="name" name="name" required value="Test User">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Reply-To Email</label>
+                        <input type="email" id="email" name="email" required value="test@example.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="subject">Subject</label>
+                        <input type="text" id="subject" name="subject" required value="SendGrid API Test">
+                    </div>
+                    <div class="form-group">
+                        <label for="to-email">To Email</label>
+                        <input type="email" id="to-email" name="to-email" required value="csorini13@gmail.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="to-name">To Name</label>
+                        <input type="text" id="to-name" name="to-name" required value="Christopher Sorini">
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message" rows="4" required>This is a test of the SendGrid API integration.</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="endpoint">API Endpoint</label>
+                        <input type="text" id="endpoint" name="endpoint" required value="/api/send-email">
+                    </div>
+                    <button type="submit" id="standard-submit">Send Test Email</button>
+                </form>
+            </div>
+            
+            <div class="tab-content" id="advanced-tab">
+                <form id="advanced-form">
+                    <div class="form-group">
+                        <label for="raw-payload">SendGrid API Payload (JSON)</label>
+                        <textarea id="raw-payload" name="raw-payload" rows="15" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="adv-endpoint">API Endpoint</label>
+                        <input type="text" id="adv-endpoint" name="adv-endpoint" required value="/api/send-email">
+                    </div>
+                    <button type="submit" id="advanced-submit">Send Raw Payload</button>
+                </form>
+            </div>
+            
+            <div id="status" class="status"></div>
+        </div>
+        
+        <div class="debug-panel">
+            <h3>Debug Log</h3>
+            <button id="clear-log" style="margin-bottom: 10px">Clear Log</button>
+            <div id="debug-log"></div>
+        </div>
+    </div>
+    
+    <script>
+        // Utility functions
+        function debugLog(message, type = 'info') {
+            console[type === 'error' ? 'error' : 'log'](message);
+            
+            const debugOutput = document.getElementById('debug-log');
+            const entry = document.createElement('div');
+            entry.className = `debug-entry debug-${type}`;
+            
+            const timestamp = document.createElement('div');
+            timestamp.textContent = new Date().toLocaleTimeString();
+            timestamp.style.fontWeight = 'bold';
+            
+            const content = document.createElement('div');
+            
+            // If message is an object, stringify it
+            if (typeof message === 'object') {
+                try {
+                    const pre = document.createElement('pre');
+                    pre.textContent = JSON.stringify(message, null, 2);
+                    content.appendChild(pre);
+                } catch (e) {
+                    content.textContent = String(message);
+                }
+            } else {
+                content.textContent = message;
+            }
+            
+            entry.appendChild(timestamp);
+            entry.appendChild(content);
+            
+            debugOutput.appendChild(entry);
+            
+            // Auto scroll to bottom
+            debugOutput.scrollTop = debugOutput.scrollHeight;
+        }
+        
+        function showStatus(message, type) {
+            const statusEl = document.getElementById('status');
+            statusEl.textContent = message;
+            statusEl.className = `status ${type}`;
+            statusEl.style.display = 'block';
+        }
+        
+        function sendEmail(endpoint, payload, submitBtn) {
+            debugLog('Sending request to: ' + endpoint);
+            debugLog('Payload:', 'info');
+            debugLog(payload);
+            
+            // Disable the button
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Sending...';
+            
+            // Send the request
+            return fetch(endpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            })
+            .then(response => {
+                debugLog(`Response status: ${response.status} (${response.ok ? 'OK' : 'Error'})`);
+                
+                return response.text().then(text => {
+                    // Try to log as JSON if possible
+                    try {
+                        debugLog('Response JSON:');
+                        const jsonData = JSON.parse(text);
+                        debugLog(jsonData);
+                        
+                        if (!response.ok) {
+                            return Promise.reject(jsonData);
+                        }
+                        return jsonData;
+                    } catch (e) {
+                        debugLog('Response Text: ' + text);
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! Status: ${response.status}, Text: ${text}`);
+                        }
+                        return { message: text };
+                    }
+                });
+            })
+            .then(data => {
+                debugLog('Email sent successfully!', 'success');
+                showStatus('Email sent successfully! Check server logs for details.', 'success');
+            })
+            .catch(error => {
+                debugLog('Error sending email:', 'error');
+                debugLog(error, 'error');
+                showStatus('Failed to send email. See debug log for details.', 'error');
+            })
+            .finally(() => {
+                // Re-enable the button
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Send Test Email';
+            });
+        }
+        
+        // Tab functionality
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Remove active class from all tabs
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                
+                // Add active class to clicked tab
+                tab.classList.add('active');
+                
+                // Show corresponding content
+                const tabId = tab.getAttribute('data-tab');
+                document.getElementById(`${tabId}-tab`).classList.add('active');
+            });
+        });
+        
+        // Clear log button
+        document.getElementById('clear-log').addEventListener('click', () => {
+            document.getElementById('debug-log').innerHTML = '';
+            debugLog('Log cleared', 'info');
+        });
+        
+        // When the document is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            debugLog('Debug tool initialized', 'info');
+            
+            // Create default advanced payload
+            const defaultPayload = {
+                personalizations: [
+                    {
+                        to: [{ email: 'csorini13@gmail.com', name: 'Christopher Sorini' }],
+                        subject: 'Advanced SendGrid API Test'
+                    }
+                ],
+                from: { email: 'website@christophersorini.com', name: 'API Test' },
+                reply_to: { email: 'test@example.com', name: 'Test User' },
+                content: [
+                    {
+                        type: 'text/plain',
+                        value: 'This is a test of the SendGrid API using the raw payload format.'
+                    },
+                    {
+                        type: 'text/html',
+                        value: '<h3>Test Email</h3><p>This is a test of the SendGrid API using the raw payload format.</p>'
+                    }
+                ]
+            };
+            
+            document.getElementById('raw-payload').value = JSON.stringify(defaultPayload, null, 2);
+            
+            // Handle standard form submission
+            document.getElementById('standard-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const name = document.getElementById('name').value.trim();
+                const email = document.getElementById('email').value.trim();
+                const subject = document.getElementById('subject').value.trim();
+                const toEmail = document.getElementById('to-email').value.trim();
+                const toName = document.getElementById('to-name').value.trim();
+                const message = document.getElementById('message').value.trim();
+                const endpoint = document.getElementById('endpoint').value.trim();
+                
+                // Create payload in SendGrid format
+                const payload = {
+                    personalizations: [
+                        {
+                            to: [{ email: toEmail, name: toName }],
+                            subject: subject
+                        }
+                    ],
+                    from: { email: 'website@christophersorini.com', name: name },
+                    reply_to: { email: email, name: name },
+                    content: [
+                        {
+                            type: 'text/plain',
+                            value: `Name: ${name}\nEmail: ${email}\nMessage: ${message}`
+                        },
+                        {
+                            type: 'text/html',
+                            value: `<h3>New message from ${name}</h3>
+                                    <p><strong>Email:</strong> ${email}</p>
+                                    <p><strong>Message:</strong><br>${message.replace(/\n/g, '<br>')}</p>`
+                        }
+                    ]
+                };
+                
+                const submitBtn = document.getElementById('standard-submit');
+                sendEmail(endpoint, payload, submitBtn);
+            });
+            
+            // Handle advanced form submission
+            document.getElementById('advanced-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                try {
+                    const rawPayload = document.getElementById('raw-payload').value;
+                    const payload = JSON.parse(rawPayload);
+                    const endpoint = document.getElementById('adv-endpoint').value.trim();
+                    
+                    const submitBtn = document.getElementById('advanced-submit');
+                    sendEmail(endpoint, payload, submitBtn);
+                } catch (error) {
+                    debugLog('Error parsing JSON payload: ' + error.message, 'error');
+                    showStatus('Invalid JSON payload. Check the debug log.', 'error');
+                }
+            });
+        });
+    </script>
+</body>
+</html> 

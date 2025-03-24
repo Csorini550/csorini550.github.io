@@ -4,74 +4,26 @@ class Contact extends HTMLElement {
     super();
     this.attachShadow({ mode: 'open' });
     console.log('Contact component initialized');
-    this.emailJSLoaded = false;
-    this.emailServiceKey = "zxeSmFLK-CuHM_mKO";
-    this.serviceID = "service_eh0jpbf";
-    this.templateID = "template_pplvcfl";
-    this.maxRetries = 3;
-    this.retryCount = 0;
     
-    // SendGrid configuration
-    this.useSendGrid = true; // Set to true to use SendGrid instead of EmailJS
-    // API key removed for security - we'll use EmailJS instead of direct SendGrid API
+    // SendGrid configuration - Use GitHub Pages friendly path
+    this.sendGridEndpoint = '/api/send-email';
+    
+    // For GitHub Pages, determine if we're on the actual deployed site
+    // and adjust the endpoint accordingly
+    if (window.location.hostname === 'christophersorini.github.io' || 
+        window.location.hostname.endsWith('github.io')) {
+      // When on GitHub Pages, use a proxy approach or external serverless function
+      // For now, we'll use a GitHub-friendly path approach
+      this.sendGridEndpoint = '/api/send-email';
+      console.log('GitHub Pages detected, using:', this.sendGridEndpoint);
+    }
   }
 
   connectedCallback() {
     console.log('Contact component connected to DOM');
     this.render();
     this.loadFontAwesome();
-    
-    // Initialize email service
-    this.initializeEmailService();
-  }
-
-  initializeEmailService() {
-    console.log(`Initializing email service (attempt ${this.retryCount + 1}/${this.maxRetries})`);
-    
-    // First check if EmailJS was successfully loaded by the main HTML
-    if (window.emailjsLoaded === true && typeof window.emailjs !== 'undefined') {
-      console.log("EmailJS already loaded and initialized by main HTML");
-      this.emailJSLoaded = true;
-      this.setupEventListeners();
-      return;
-    }
-    
-    // Check if EmailJS is available but not marked as loaded
-    if (typeof window.emailjs !== 'undefined') {
-      console.log("EmailJS found in global scope, attempting to initialize");
-      try {
-        window.emailjs.init(this.emailServiceKey);
-        this.emailJSLoaded = true;
-        window.emailjsLoaded = true;
-        console.log("EmailJS initialized successfully");
-        this.setupEventListeners();
-      } catch (error) {
-        console.error("Failed to initialize EmailJS:", error);
-        this.handleEmailJSInitFailure();
-      }
-      return;
-    }
-    
-    // If EmailJS is not available at all, load it from the recommended CDN
-    this.loadEmailJS();
-  }
-
-  handleEmailJSInitFailure() {
-    this.retryCount++;
-    
-    if (this.retryCount < this.maxRetries) {
-      console.log(`Retrying EmailJS initialization in 2 seconds... (${this.retryCount}/${this.maxRetries})`);
-      setTimeout(() => this.initializeEmailService(), 2000);
-    } else {
-      console.error("Max retries reached. Email service unavailable.");
-      // Show error message in the contact form
-      const statusMessage = this.shadowRoot.querySelector('#status-message');
-      if (statusMessage) {
-        this.showStatus(statusMessage, 'Email service is not available at the moment. Please contact me directly at csorini13@gmail.com.', 'error');
-      }
-      // Still set up event listeners for form validation and provide fallback info
-      this.setupEventListeners();
-    }
+    this.setupEventListeners();
   }
 
   loadFontAwesome() {
@@ -85,83 +37,233 @@ class Contact extends HTMLElement {
     console.log('Font Awesome loaded');
   }
 
-  loadEmailJS() {
-    console.log('Loading EmailJS script from jsDelivr CDN');
+  // Send email using SendGrid
+  sendWithSendGrid(formData) {
+    console.log("Sending email with SendGrid:", formData);
     
-    // Use jsDelivr CDN which is more reliable
-    const script = document.createElement('script');
-    script.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js';
-    script.type = 'text/javascript';
-    script.async = true;
-    
-    script.onload = () => {
-      console.log('EmailJS script loaded from CDN');
-      // Initialize EmailJS after a short delay to ensure it's fully loaded
-      setTimeout(() => {
-        if (typeof window.emailjs !== 'undefined') {
-          try {
-            window.emailjs.init(this.emailServiceKey);
-            console.log("EmailJS initialized successfully after CDN load");
-            this.emailJSLoaded = true;
-            window.emailjsLoaded = true;
-            this.setupEventListeners();
-          } catch (error) {
-            console.error("Failed to initialize EmailJS after CDN load:", error);
-            this.loadLocalEmailJS();
-          }
-        } else {
-          console.error("EmailJS not defined after script load");
-          this.loadLocalEmailJS();
+    // Create the SendGrid request payload
+    const payload = {
+      personalizations: [
+        {
+          to: [{ email: formData.to_email, name: formData.to_name }],
+          subject: formData.subject
         }
-      }, 500);
+      ],
+      from: { email: 'website@christophersorini.com', name: formData.from_name },
+      reply_to: { email: formData.reply_to, name: formData.from_name },
+      content: [
+        {
+          type: 'text/plain',
+          value: `Name: ${formData.name}\nEmail: ${formData.email}\nMessage: ${formData.message}`
+        },
+        {
+          type: 'text/html',
+          value: `<h3>New message from ${formData.name}</h3>
+                  <p><strong>Email:</strong> ${formData.email}</p>
+                  <p><strong>Message:</strong><br>${formData.message.replace(/\n/g, '<br>')}</p>`
+        }
+      ]
     };
     
-    script.onerror = () => {
-      console.error('Failed to load EmailJS from CDN');
-      this.loadLocalEmailJS();
-    };
+    console.log("🚀 Request payload:", JSON.stringify(payload, null, 2));
+    console.log("🔗 Sending to endpoint:", this.sendGridEndpoint);
     
-    // Add to document head for global availability
-    document.head.appendChild(script);
+    // Determine if we're on GitHub Pages
+    if (window.location.hostname === 'christophersorini.github.io' || 
+        window.location.hostname.endsWith('github.io')) {
+      
+      // When on GitHub Pages, use the global handler
+      console.log("📡 Using GitHub Pages SendGrid handler");
+      
+      // Check if the handler is available
+      if (typeof window.handleSendGridRequest === 'function') {
+        return Promise.resolve()
+          .then(() => window.handleSendGridRequest(payload))
+          .then(response => {
+            console.log("📥 GitHub Pages response:", response);
+            if (!response.success) {
+              return Promise.reject(response);
+            }
+            return response;
+          });
+      } else {
+        console.error("❌ GitHub Pages SendGrid handler not found");
+        return Promise.reject({
+          error: "SendGrid handler not available",
+          details: "The GitHub Pages API handler was not loaded properly."
+        });
+      }
+    }
+    
+    // Standard server approach
+    return fetch(this.sendGridEndpoint, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    })
+    .then(response => {
+      console.log("📥 Response status:", response.status);
+      console.log("📥 Response OK:", response.ok);
+      
+      // Try to get the response text first to debug any non-JSON responses
+      return response.text().then(text => {
+        console.log("📄 Raw response text:", text);
+        
+        // If it's not JSON or empty, return appropriate format
+        if (!text || text.trim() === '') {
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+          return { message: "Success (no content)" };
+        }
+        
+        // Try to parse as JSON
+        try {
+          const data = JSON.parse(text);
+          if (!response.ok) {
+            return Promise.reject(data);
+          }
+          return data;
+        } catch (e) {
+          console.error("❌ Error parsing JSON response:", e);
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}, Body: ${text}`);
+          }
+          return { message: text };
+        }
+      });
+    });
+  }
+
+  setupEventListeners() {
+    const form = this.shadowRoot.querySelector('#contact-form');
+    if (form) {
+      console.log('Form found and event listener set up');
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        console.log('Form submitted');
+        
+        // Show loading state
+        const submitButton = form.querySelector('button[type="submit"]');
+        const originalButtonText = submitButton.textContent;
+        submitButton.textContent = 'Sending...';
+        submitButton.disabled = true;
+        
+        // Show sending overlay
+        const sendingOverlay = this.shadowRoot.querySelector('#sending-overlay');
+        if (sendingOverlay) {
+          sendingOverlay.style.display = 'flex';
+        }
+        
+        // Display status message
+        const statusMessage = this.shadowRoot.querySelector('#status-message');
+        if (!statusMessage) {
+          console.error("Status message element not found");
+          submitButton.textContent = originalButtonText;
+          submitButton.disabled = false;
+          if (sendingOverlay) sendingOverlay.style.display = 'none';
+          return;
+        }
+        
+        // Validate form data
+        const name = form.querySelector('#name').value.trim();
+        const email = form.querySelector('#email').value.trim();
+        const subject = form.querySelector('#subject').value.trim();
+        const message = form.querySelector('#message').value.trim();
+        
+        if (!name || !email || !subject || !message) {
+          this.showStatus(statusMessage, 'Please fill out all fields.', 'error');
+          submitButton.textContent = originalButtonText;
+          submitButton.disabled = false;
+          if (sendingOverlay) sendingOverlay.style.display = 'none';
+          return;
+        }
+        
+        // Validate email format
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+          this.showStatus(statusMessage, 'Please enter a valid email address.', 'error');
+          submitButton.textContent = originalButtonText;
+          submitButton.disabled = false;
+          if (sendingOverlay) sendingOverlay.style.display = 'none';
+          return;
+        }
+        
+        // Gather form data
+        const formData = {
+          name: name,
+          email: email,
+          subject: subject,
+          message: message,
+          to_name: "Christopher Sorini",
+          to_email: 'csorini13@gmail.com',
+          from_name: name,
+          reply_to: email
+        };
+        
+        console.log("Form data prepared:", formData);
+        
+        // Send email with SendGrid
+        this.sendWithSendGrid(formData)
+          .then((response) => {
+            console.log("Email sent successfully:", response);
+            // Show success message
+            this.showStatus(statusMessage, 'Thank you for your message! I will get back to you soon.', 'success');
+            form.reset();
+          })
+          .catch((error) => {
+            console.error('Email error:', error);
+            
+            // Provide specific error message based on the error type
+            let errorMessage = 'Sorry, there was an error sending your message. Please try again or contact me directly at csorini13@gmail.com.';
+            
+            this.showStatus(statusMessage, errorMessage, 'error');
+          })
+          .finally(() => {
+            // Reset button state
+            submitButton.textContent = originalButtonText;
+            submitButton.disabled = false;
+            // Hide sending overlay
+            if (sendingOverlay) sendingOverlay.style.display = 'none';
+          });
+      });
+    } else {
+      console.error('Contact form not found in the shadow DOM');
+    }
   }
   
-  loadLocalEmailJS() {
-    console.log('Attempting to load EmailJS from local fallback');
-    const script = document.createElement('script');
-    // Use the correct path to the local file - remove leading slash if needed
-    script.src = 'js/vendors/emailjs.min.js';
-    script.type = 'text/javascript';
-    script.async = true;
+  // Helper method to show status messages
+  showStatus(element, message, type) {
+    // Clear any existing content
+    element.textContent = '';
     
-    script.onload = () => {
-      console.log('EmailJS script loaded from local fallback');
-      // Initialize EmailJS after a short delay
+    // Create icon element
+    const icon = document.createElement('i');
+    icon.className = type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-circle';
+    icon.style.marginRight = '8px';
+    
+    // Create text node with message
+    const text = document.createTextNode(message);
+    
+    // Add icon and text to element
+    element.appendChild(icon);
+    element.appendChild(text);
+    
+    // Set appropriate class and display
+    element.className = type;
+    element.style.display = 'block';
+    
+    // Scroll to status message
+    element.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    
+    // If it's a success message, hide it after 5 seconds
+    if (type === 'success') {
       setTimeout(() => {
-        if (typeof window.emailjs !== 'undefined') {
-          try {
-            window.emailjs.init(this.emailServiceKey);
-            console.log("EmailJS initialized successfully after local load");
-            this.emailJSLoaded = true;
-            window.emailjsLoaded = true;
-            this.setupEventListeners();
-          } catch (error) {
-            console.error("Failed to initialize EmailJS after local load:", error);
-            this.handleEmailJSInitFailure();
-          }
-        } else {
-          console.error("EmailJS not defined after local script load");
-          this.handleEmailJSInitFailure();
-        }
-      }, 500);
-    };
-    
-    script.onerror = () => {
-      console.error('Failed to load EmailJS from local fallback');
-      this.handleEmailJSInitFailure();
-    };
-    
-    // Add to document head for global availability
-    document.head.appendChild(script);
+        element.style.display = 'none';
+      }, 5000);
+    }
   }
 
   render() {
@@ -544,247 +646,6 @@ class Contact extends HTMLElement {
         </div>
       </section>
     `;
-  }
-
-  // Modified method to use EmailJS as a secure proxy for SendGrid
-  sendWithSendGrid(formData) {
-    console.log("Using EmailJS as a secure proxy for SendGrid:", formData);
-    
-    // Instead of directly calling SendGrid API with the key in client-side code,
-    // we'll use EmailJS which keeps the credentials server-side
-    return this.verifyEmailService()
-      .then(isReady => {
-        if (!isReady) {
-          throw new Error("Email service is not ready");
-        }
-        console.log("Sending email with data:", formData);
-        
-        // Use EmailJS to send the email - it will use your configured email service (can be SendGrid)
-        return window.emailjs.send(this.serviceID, this.templateID, formData, this.emailServiceKey);
-      });
-  }
-
-  setupEventListeners() {
-    const form = this.shadowRoot.querySelector('#contact-form');
-    if (form) {
-      console.log('Form found and event listener set up');
-      form.addEventListener('submit', (e) => {
-        e.preventDefault();
-        console.log('Form submitted');
-        
-        // Show loading state
-        const submitButton = form.querySelector('button[type="submit"]');
-        const originalButtonText = submitButton.textContent;
-        submitButton.textContent = 'Sending...';
-        submitButton.disabled = true;
-        
-        // Show sending overlay
-        const sendingOverlay = this.shadowRoot.querySelector('#sending-overlay');
-        if (sendingOverlay) {
-          sendingOverlay.style.display = 'flex';
-        }
-        
-        // Display status message
-        const statusMessage = this.shadowRoot.querySelector('#status-message');
-        if (!statusMessage) {
-          console.error("Status message element not found");
-          submitButton.textContent = originalButtonText;
-          submitButton.disabled = false;
-          if (sendingOverlay) sendingOverlay.style.display = 'none';
-          return;
-        }
-        
-        // Validate form data
-        const name = form.querySelector('#name').value.trim();
-        const email = form.querySelector('#email').value.trim();
-        const subject = form.querySelector('#subject').value.trim();
-        const message = form.querySelector('#message').value.trim();
-        
-        if (!name || !email || !subject || !message) {
-          this.showStatus(statusMessage, 'Please fill out all fields.', 'error');
-          submitButton.textContent = originalButtonText;
-          submitButton.disabled = false;
-          if (sendingOverlay) sendingOverlay.style.display = 'none';
-          return;
-        }
-        
-        // Validate email format
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
-          this.showStatus(statusMessage, 'Please enter a valid email address.', 'error');
-          submitButton.textContent = originalButtonText;
-          submitButton.disabled = false;
-          if (sendingOverlay) sendingOverlay.style.display = 'none';
-          return;
-        }
-        
-        // Gather form data
-        const formData = {
-          name: name,
-          email: email,
-          subject: subject,
-          message: message,
-          to_name: "Christopher Sorini",
-          to_email: 'csorini13@gmail.com',
-          recipient: 'csorini13@gmail.com',
-          email_to: 'csorini13@gmail.com',
-          destination: 'csorini13@gmail.com',
-          toEmail: 'csorini13@gmail.com',
-          from_name: name,
-          reply_to: email
-        };
-        
-        console.log("Form data prepared:", formData);
-        
-        // Choose which email service to use
-        let emailPromise;
-        
-        if (this.useSendGrid) {
-          // Use SendGrid
-          emailPromise = this.sendWithSendGrid(formData);
-        } else {
-          // Use EmailJS
-          emailPromise = this.verifyEmailService()
-            .then(isReady => {
-              if (!isReady) {
-                throw new Error("Email service is not ready");
-              }
-              console.log("Sending email with data:", formData);
-              return window.emailjs.send(this.serviceID, this.templateID, formData, this.emailServiceKey);
-            });
-        }
-        
-        // Process the response
-        emailPromise
-          .then((response) => {
-            console.log("Email sent successfully:", response);
-            // Show success message
-            this.showStatus(statusMessage, 'Thank you for your message! I will get back to you soon.', 'success');
-            form.reset();
-          })
-          .catch((error) => {
-            console.error('Email error:', error);
-            
-            // Provide specific error message based on the error type
-            let errorMessage = 'Sorry, there was an error sending your message. Please try again or contact me directly at csorini13@gmail.com.';
-            
-            if (error.message === "Email service is not ready") {
-              errorMessage = 'Email service is not available at the moment. Please contact me directly at csorini13@gmail.com.';
-            } else if (error.message === "Form validation failed" || error.message === "Invalid email format") {
-              // Validation errors already handled
-              return;
-            } else if (error.text) {
-              // If there's a specific error text from EmailJS
-              errorMessage = `Email error: ${error.text}. Please contact me directly at csorini13@gmail.com.`;
-            }
-            
-            this.showStatus(statusMessage, errorMessage, 'error');
-          })
-          .finally(() => {
-            // Reset button state
-            submitButton.textContent = originalButtonText;
-            submitButton.disabled = false;
-            // Hide sending overlay
-            if (sendingOverlay) sendingOverlay.style.display = 'none';
-          });
-      });
-    } else {
-      console.error('Contact form not found in the shadow DOM');
-    }
-  }
-  
-  // Method to verify EmailJS is ready
-  verifyEmailService() {
-    return new Promise((resolve) => {
-      // If EmailJS was already loaded successfully
-      if (this.emailJSLoaded && typeof window.emailjs !== 'undefined') {
-        console.log("EmailJS verified as ready");
-        resolve(true);
-        return;
-      }
-      
-      // If EmailJS exists but wasn't marked as loaded, try to initialize it
-      if (typeof window.emailjs !== 'undefined') {
-        try {
-          window.emailjs.init(this.emailServiceKey);
-          this.emailJSLoaded = true;
-          console.log("EmailJS initialized during verification");
-          resolve(true);
-        } catch (error) {
-          console.error("EmailJS initialization failed during verification:", error);
-          resolve(false);
-        }
-        return;
-      }
-      
-      // If EmailJS doesn't exist at all, try loading it once more
-      console.log("EmailJS not available, attempting one final load");
-      const script = document.createElement('script');
-      script.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js';
-      script.type = 'text/javascript';
-      script.async = true;
-      
-      const timeoutId = setTimeout(() => {
-        console.error("EmailJS load timed out during verification");
-        resolve(false);
-      }, 5000);
-      
-      script.onload = () => {
-        clearTimeout(timeoutId);
-        console.log("EmailJS loaded during verification");
-        setTimeout(() => {
-          try {
-            window.emailjs.init(this.emailServiceKey);
-            this.emailJSLoaded = true;
-            console.log("EmailJS initialized during verification");
-            resolve(true);
-          } catch (error) {
-            console.error("EmailJS init failed during verification:", error);
-            resolve(false);
-          }
-        }, 500);
-      };
-      
-      script.onerror = () => {
-        clearTimeout(timeoutId);
-        console.error("EmailJS failed to load during verification");
-        resolve(false);
-      };
-      
-      document.head.appendChild(script);
-    });
-  }
-  
-  // Helper method to show status messages
-  showStatus(element, message, type) {
-    // Clear any existing content
-    element.textContent = '';
-    
-    // Create icon element
-    const icon = document.createElement('i');
-    icon.className = type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-circle';
-    icon.style.marginRight = '8px';
-    
-    // Create text node with message
-    const text = document.createTextNode(message);
-    
-    // Add icon and text to element
-    element.appendChild(icon);
-    element.appendChild(text);
-    
-    // Set appropriate class and display
-    element.className = type;
-    element.style.display = 'block';
-    
-    // Scroll to status message
-    element.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    
-    // If it's a success message, hide it after 5 seconds
-    if (type === 'success') {
-      setTimeout(() => {
-        element.style.display = 'none';
-      }, 5000);
-    }
   }
 }
 

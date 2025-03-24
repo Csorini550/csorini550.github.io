@@ -1,0 +1,21 @@
+[build]
+  publish = "src"
+  command = "echo 'No build command'"
+
+[functions]
+  directory = "api"
+  node_bundler = "esbuild"
+
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
+
+[dev]
+  framework = "#static"
+  publish = "src"
+  port = 8888
+
+# Environment variable placeholder - actual values are set in Netlify UI
+[build.environment]
+  SENDGRID_API_KEY = "set-in-netlify-ui" 

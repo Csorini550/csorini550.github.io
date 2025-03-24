@@ -395,7 +395,7 @@ class Experience extends HTMLElement {
               <div class="timeline-content">
                 <h3>App Academy</h3>
                 <h4>Full-Stack Development Bootcamp</h4>
-                <p>Selected to join App Academy's elite program with a highly competitive <strong>3% acceptance rate</strong> (more selective than Harvard). Completed an intensive 1000+ hour coding bootcamp focused on full-stack web development. Mastered technologies including JavaScript, React, Redux, Python, Flask, and PostgreSQL.</p>
+                <p>Selected to join App Academy's elite program with a highly competitive <strong>3% acceptance rate</strong>. Completed an intensive 1000+ hour coding bootcamp focused on full-stack web development. Mastered technologies including JavaScript, React, Redux, Python, Flask, and PostgreSQL.</p>
                 <div class="university-images">
                   <img src="/src/images/appacademy.png" alt="App Academy Logo" class="university-logo">
                 </div>
