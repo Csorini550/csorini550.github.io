@@ -87,46 +87,6 @@ document.addEventListener('DOMContentLoaded', function() {
     animateSkillBars();
     window.addEventListener('scroll', animateSkillBars);
 
-    // Contact form submission
-    const contactForm = document.getElementById('contact-form');
-    if (contactForm) {
-        contactForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            // Collect form data
-            const formData = {
-                name: document.getElementById('name').value,
-                email: document.getElementById('email').value,
-                subject: document.getElementById('subject').value,
-                message: document.getElementById('message').value
-            };
-            
-            // Here you would typically send the data to a server
-            // For now, we'll just log it and show a success message
-            console.log('Form submitted:', formData);
-            
-            // Show success message
-            const formGroups = document.querySelectorAll('.form-group');
-            formGroups.forEach(group => group.style.display = 'none');
-            
-            const submitButton = contactForm.querySelector('button[type="submit"]');
-            submitButton.style.display = 'none';
-            
-            const successMessage = document.createElement('div');
-            successMessage.className = 'success-message';
-            successMessage.innerHTML = `
-                <i class="fas fa-check-circle"></i>
-                <h3>Message Sent!</h3>
-                <p>Thank you for reaching out, ${formData.name}. I'll get back to you shortly.</p>
-            `;
-            
-            contactForm.appendChild(successMessage);
-            
-            // Reset form
-            contactForm.reset();
-        });
-    }
-
     // Newsletter subscription
     const subscribeForm = document.querySelector('.subscribe-form');
     if (subscribeForm) {
