@@ -605,7 +605,7 @@ class Contact extends HTMLElement {
             </div>
             <div class="contact-info" data-aos="fade-left">
               <div class="avatar-container">
-                <img src="images/Image (3).jpeg" alt="Christopher T. Sorini" />
+                <img src="src/images/Image (3).jpeg" alt="Christopher T. Sorini" />
               </div>
               <div class="info-container">
                 <div class="info-item">

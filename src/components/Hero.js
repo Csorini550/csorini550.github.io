@@ -703,7 +703,7 @@ class Hero extends HTMLElement {
             <p class="typewriter" id="typewriter"></p>
             <div class="cta-buttons">
               <a href="#about" class="btn primary-btn">My Journey</a>
-              <a href="#ai-tools" class="btn secondary-btn">View Projects</a>
+              <a href="#ai-tools" class="btn secondary-btn">View AI Tools</a>
             </div>
           </div>
           
@@ -733,7 +733,7 @@ class Hero extends HTMLElement {
               </div>
               
               <div class="avatar-wrapper" id="avatar-wrapper">
-                <img class="profile-image" src="images/profile-placeholder.svg" alt="Christopher T. Sorini">
+                <img class="profile-image" src="src/images/profile-placeholder.svg" alt="Christopher T. Sorini">
                 <div class="tech-badges">
                   <div class="tech-badge js">
                     <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/javascript/javascript-original.svg" alt="JavaScript">

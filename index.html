@@ -3,15 +3,119 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="refresh" content="0; url=src/index.html">
     <title>Christopher T. Sorini | Software Engineer</title>
+    <meta name="description" content="Portfolio showcasing Christopher T. Sorini's journey and projects as a software engineer">
     <link rel="apple-touch-icon" sizes="180x180" href="src/images/favicon_logoai/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="src/images/favicon_logoai/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="src/images/favicon_logoai/favicon-16x16.png">
     <link rel="manifest" href="src/images/favicon_logoai/site.webmanifest">
     <link rel="shortcut icon" href="src/images/favicon_logoai/favicon.ico">
+    <link rel="stylesheet" href="src/css/styles.css">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- AOS - Animate On Scroll Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <!-- Devicon - Tech Stack Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css">
+    <!-- EmailJS - Using jsDelivr CDN as recommended (more reliable) -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize EmailJS with provided key
+            console.log("Initializing EmailJS from main HTML");
+            try {
+                if (typeof emailjs !== 'undefined') {
+                    emailjs.init("zxeSmFLK-CuHM_mKO");
+                    console.log("EmailJS initialized successfully in main HTML");
+                    window.emailjsLoaded = true;
+                } else {
+                    console.error("EmailJS library not available in main HTML");
+                    window.emailjsLoaded = false;
+                    // Load local fallback
+                    loadLocalFallback();
+                }
+            } catch (error) {
+                console.error("Error initializing EmailJS in main HTML:", error);
+                window.emailjsLoaded = false;
+                // Load local fallback
+                loadLocalFallback();
+            }
+            
+            function loadLocalFallback() {
+                console.log("Loading EmailJS local fallback");
+                var script = document.createElement('script');
+                script.type = 'text/javascript';
+                script.src = 'src/js/vendors/emailjs.min.js';
+                
+                script.onload = function() {
+                    console.log("EmailJS local fallback loaded successfully");
+                    try {
+                        emailjs.init("zxeSmFLK-CuHM_mKO");
+                        console.log("EmailJS initialized from local fallback");
+                        window.emailjsLoaded = true;
+                    } catch (error) {
+                        console.error("Error initializing EmailJS from local fallback:", error);
+                        window.emailjsLoaded = false;
+                    }
+                };
+                
+                script.onerror = function() {
+                    console.error("Failed to load EmailJS local fallback");
+                    window.emailjsLoaded = false;
+                };
+                
+                document.head.appendChild(script);
+            }
+        });
+    </script>
+    <style>
+        /* Basic reset and styles for the main page */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html, body {
+            font-family: 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
+    </style>
 </head>
 <body>
-    <p>If you are not redirected automatically, please <a href="src/index.html">click here</a>.</p>
+    <!-- Navigation Component -->
+    <nav-component>
+        <i class="fas fa-bars" slot="toggle-icon"></i>
+    </nav-component>
+    
+    <!-- Hero Component -->
+    <hero-component>
+        <source src="src/images/chicago_dusk.mp4" type="video/mp4" slot="video-source">
+    </hero-component>
+    
+    <!-- About Component -->
+    <about-component></about-component>
+    
+    <!-- AI Tools Component -->
+    <ai-tools-component></ai-tools-component>
+    
+    <!-- Interests Component -->
+    <interests-component></interests-component>
+    
+    <!-- Experience Component -->
+    <experience-component></experience-component>
+    
+    <!-- Contact Component -->
+    <contact-component recipient-email="csorini13@gmail.com" recipient-name="Christopher T. Sorini"></contact-component>
+    
+    <!-- Footer Component -->
+    <footer-component></footer-component>
+
+    <!-- JavaScript -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script type="module" src="src/js/app.js"></script>
+    <script type="module" src="src/js/force-reload.js"></script>
 </body>
 </html> 

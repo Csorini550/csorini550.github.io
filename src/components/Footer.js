@@ -255,12 +255,16 @@ class Footer extends HTMLElement {
             <div class="footer-logo">
               <a href="#hero">Christopher <span>T. Sorini</span></a>
             </div>
-            <div class="footer-links">
-              <a href="#about">My Journey</a>
-              <a href="#ai-tools">Projects</a>
-              <a href="#interests">Interests</a>
-              <a href="#experience">Experience</a>
-              <a href="#contact">Contact</a>
+            <div class="footer-links-section">
+              <h3>Explore</h3>
+              <div class="footer-links">
+                <a href="#hero">Home</a>
+                <a href="#about">About</a>
+                <a href="#ai-tools">AI Tools</a>
+                <a href="#interests">Interests</a>
+                <a href="#experience">Experience</a>
+                <a href="#contact">Contact</a>
+              </div>
             </div>
             <div class="footer-subscribe">
               <h3>Connect with me</h3>

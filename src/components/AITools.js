@@ -174,47 +174,44 @@ class AITools extends HTMLElement {
           <h3 class="category-title" data-aos="fade-up">Local Model Deployment</h3>
           <div class="ai-tools-grid">
             <!-- Ollama -->
-            <div class="ai-tool-card" data-aos="fade-up">
-              <img src="images/ollama.svg?v=1" alt="Ollama Local Model Runner" class="ai-tool-img">
+            <div class="ai-tool-card" data-aos="fade-up" data-aos-delay="100">
+              <img src="src/images/ollama.svg?v=1" alt="Ollama Local Model Runner" class="ai-tool-img">
               <div class="ai-tool-content">
                 <h3>Ollama</h3>
-                <p>Run large language models locally with Ollama. Deploy and run models like Llama, Mistral, and Gemma on your own hardware with minimal setup. Perfect for privacy-focused applications or offline development.</p>
                 <div class="ai-tool-tags">
-                  <span class="ai-tool-tag">Local LLMs</span>
-                  <span class="ai-tool-tag">CLI</span>
-                  <span class="ai-tool-tag">Privacy</span>
+                  <span class="ai-tool-tag">Local Models</span>
+                  <span class="ai-tool-tag">Open Source</span>
                 </div>
-                <a href="https://ollama.com" target="_blank" rel="noopener noreferrer" class="ai-tool-link">Learn more <i class="fas fa-arrow-right"></i></a>
+                <p>Run large language models locally with a simple API.</p>
+                <a href="https://ollama.ai/" target="_blank" class="ai-tool-link">Learn more <i class="fas fa-external-link-alt"></i></a>
               </div>
             </div>
             
             <!-- LM Studio -->
-            <div class="ai-tool-card" data-aos="fade-up" data-aos-delay="100">
-              <img src="images/lm-studio.svg?v=1" alt="LM Studio" class="ai-tool-img">
+            <div class="ai-tool-card" data-aos="fade-up" data-aos-delay="200">
+              <img src="src/images/lm-studio.svg?v=1" alt="LM Studio" class="ai-tool-img">
               <div class="ai-tool-content">
                 <h3>LM Studio</h3>
-                <p>A desktop application for running and evaluating local LLMs with a user-friendly interface. LM Studio enables easy testing and comparison of different models and parameters, with a built-in chat interface and API server.</p>
                 <div class="ai-tool-tags">
-                  <span class="ai-tool-tag">GUI</span>
-                  <span class="ai-tool-tag">Local Inference</span>
-                  <span class="ai-tool-tag">Model Testing</span>
+                  <span class="ai-tool-tag">Desktop App</span>
+                  <span class="ai-tool-tag">Model Discovery</span>
                 </div>
-                <a href="https://lmstudio.ai" target="_blank" rel="noopener noreferrer" class="ai-tool-link">Explore LM Studio <i class="fas fa-arrow-right"></i></a>
+                <p>Discover, download, and run local LLMs with a desktop interface.</p>
+                <a href="https://lmstudio.ai/" target="_blank" class="ai-tool-link">Learn more <i class="fas fa-external-link-alt"></i></a>
               </div>
             </div>
             
             <!-- LocalAI -->
-            <div class="ai-tool-card" data-aos="fade-up" data-aos-delay="200">
-              <img src="images/localai.svg?v=1" alt="LocalAI" class="ai-tool-img">
+            <div class="ai-tool-card" data-aos="fade-up" data-aos-delay="300">
+              <img src="src/images/localai.svg?v=1" alt="LocalAI" class="ai-tool-img">
               <div class="ai-tool-content">
                 <h3>LocalAI</h3>
-                <p>An open-source alternative to OpenAI API that runs inference locally. Deploy both open and closed source models with the same OpenAI-compatible API, allowing easy integration with existing applications.</p>
                 <div class="ai-tool-tags">
-                  <span class="ai-tool-tag">API Compatible</span>
                   <span class="ai-tool-tag">Self-hosted</span>
-                  <span class="ai-tool-tag">Multi-modal</span>
+                  <span class="ai-tool-tag">OpenAI Alternative</span>
                 </div>
-                <a href="https://localai.io" target="_blank" rel="noopener noreferrer" class="ai-tool-link">View project <i class="fas fa-arrow-right"></i></a>
+                <p>Self-hosted OpenAI alternative running on consumer hardware.</p>
+                <a href="https://github.com/mudler/LocalAI" target="_blank" class="ai-tool-link">Learn more <i class="fas fa-external-link-alt"></i></a>
               </div>
             </div>
           </div>
@@ -222,47 +219,44 @@ class AITools extends HTMLElement {
           <h3 class="category-title" data-aos="fade-up">Model Fine-tuning Tools</h3>
           <div class="ai-tools-grid">
             <!-- NVIDIA NeMo -->
-            <div class="ai-tool-card" data-aos="fade-up">
-              <img src="images/nvidia-nemo.svg?v=1" alt="NVIDIA NeMo" class="ai-tool-img">
+            <div class="ai-tool-card" data-aos="fade-up" data-aos-delay="400">
+              <img src="src/images/nvidia-nemo.svg?v=1" alt="NVIDIA NeMo" class="ai-tool-img">
               <div class="ai-tool-content">
                 <h3>NVIDIA NeMo</h3>
-                <p>A toolkit for building, training and fine-tuning GPU-accelerated language models at scale. NeMo supports conversational AI models with features for domain adaptation and specialized applications.</p>
                 <div class="ai-tool-tags">
-                  <span class="ai-tool-tag">NVIDIA</span>
-                  <span class="ai-tool-tag">NLP</span>
+                  <span class="ai-tool-tag">Model Training</span>
                   <span class="ai-tool-tag">Enterprise</span>
                 </div>
-                <a href="https://developer.nvidia.com/nemo" target="_blank" rel="noopener noreferrer" class="ai-tool-link">Explore NeMo <i class="fas fa-arrow-right"></i></a>
+                <p>Conversational AI toolkit for building, customizing and deploying generative AI models.</p>
+                <a href="https://developer.nvidia.com/nemo" target="_blank" class="ai-tool-link">Learn more <i class="fas fa-external-link-alt"></i></a>
               </div>
             </div>
             
             <!-- PEFT -->
-            <div class="ai-tool-card" data-aos="fade-up" data-aos-delay="100">
-              <img src="images/peft.svg?v=1" alt="PEFT (Parameter-Efficient Fine-Tuning)" class="ai-tool-img">
+            <div class="ai-tool-card" data-aos="fade-up" data-aos-delay="500">
+              <img src="src/images/peft.svg?v=1" alt="PEFT (Parameter-Efficient Fine-Tuning)" class="ai-tool-img">
               <div class="ai-tool-content">
-                <h3>PEFT</h3>
-                <p>Parameter-Efficient Fine-Tuning methods like LoRA, QLoRA, and Adapters enable fine-tuning large models with minimal resources. Optimize just a small subset of parameters while maintaining performance.</p>
+                <h3>PEFT Library</h3>
                 <div class="ai-tool-tags">
-                  <span class="ai-tool-tag">Efficient Tuning</span>
-                  <span class="ai-tool-tag">LoRA</span>
-                  <span class="ai-tool-tag">Hugging Face</span>
+                  <span class="ai-tool-tag">Fine-tuning</span>
+                  <span class="ai-tool-tag">HuggingFace</span>
                 </div>
-                <a href="https://huggingface.co/docs/peft/index" target="_blank" rel="noopener noreferrer" class="ai-tool-link">Learn techniques <i class="fas fa-arrow-right"></i></a>
+                <p>Parameter-Efficient Fine-Tuning methods for efficiently adapting pre-trained language models.</p>
+                <a href="https://github.com/huggingface/peft" target="_blank" class="ai-tool-link">Learn more <i class="fas fa-external-link-alt"></i></a>
               </div>
             </div>
             
             <!-- Axolotl -->
-            <div class="ai-tool-card" data-aos="fade-up" data-aos-delay="200">
-              <img src="images/axolotl.svg?v=1" alt="Axolotl Fine-tuning Framework" class="ai-tool-img">
+            <div class="ai-tool-card" data-aos="fade-up" data-aos-delay="600">
+              <img src="src/images/axolotl.svg?v=1" alt="Axolotl Fine-tuning Framework" class="ai-tool-img">
               <div class="ai-tool-content">
                 <h3>Axolotl</h3>
-                <p>A user-friendly framework for fine-tuning language models. Simplifies the process with configuration files and optimized training pipelines for various models like Llama, Mistral, and more.</p>
                 <div class="ai-tool-tags">
                   <span class="ai-tool-tag">Fine-tuning</span>
                   <span class="ai-tool-tag">Open Source</span>
-                  <span class="ai-tool-tag">Config-driven</span>
                 </div>
-                <a href="https://github.com/OpenAccess-AI-Collective/axolotl" target="_blank" rel="noopener noreferrer" class="ai-tool-link">Check out Axolotl <i class="fas fa-arrow-right"></i></a>
+                <p>A user-friendly, streamlined tool for fine-tuning large language models.</p>
+                <a href="https://github.com/OpenAccess-AI-Collective/axolotl" target="_blank" class="ai-tool-link">Learn more <i class="fas fa-external-link-alt"></i></a>
               </div>
             </div>
           </div>
@@ -270,47 +264,44 @@ class AITools extends HTMLElement {
           <h3 class="category-title" data-aos="fade-up">Advanced Machine Learning Platforms</h3>
           <div class="ai-tools-grid">
             <!-- NVIDIA AI Enterprise -->
-            <div class="ai-tool-card" data-aos="fade-up">
-              <img src="images/nvidia-enterprise.svg?v=1" alt="NVIDIA AI Enterprise" class="ai-tool-img">
+            <div class="ai-tool-card" data-aos="fade-up" data-aos-delay="700">
+              <img src="src/images/nvidia-enterprise.svg?v=1" alt="NVIDIA AI Enterprise" class="ai-tool-img">
               <div class="ai-tool-content">
                 <h3>NVIDIA AI Enterprise</h3>
-                <p>End-to-end platform for AI development and deployment with enterprise support. Includes tools like NVIDIA RAPIDS for data science, TensorRT for inference optimization, and Triton Inference Server.</p>
                 <div class="ai-tool-tags">
                   <span class="ai-tool-tag">Enterprise</span>
-                  <span class="ai-tool-tag">MLOps</span>
-                  <span class="ai-tool-tag">GPU-optimized</span>
+                  <span class="ai-tool-tag">End-to-end</span>
                 </div>
-                <a href="https://www.nvidia.com/en-us/data-center/products/ai-enterprise/" target="_blank" rel="noopener noreferrer" class="ai-tool-link">Explore suite <i class="fas fa-arrow-right"></i></a>
+                <p>End-to-end platform for developing and deploying AI in enterprise environments.</p>
+                <a href="https://www.nvidia.com/en-us/data-center/products/ai-enterprise/" target="_blank" class="ai-tool-link">Learn more <i class="fas fa-external-link-alt"></i></a>
               </div>
             </div>
             
             <!-- HuggingFace Trainer -->
-            <div class="ai-tool-card" data-aos="fade-up" data-aos-delay="100">
-              <img src="images/huggingface-trainer.svg?v=1" alt="HuggingFace Trainer" class="ai-tool-img">
+            <div class="ai-tool-card" data-aos="fade-up" data-aos-delay="800">
+              <img src="src/images/huggingface-trainer.svg?v=1" alt="HuggingFace Trainer" class="ai-tool-img">
               <div class="ai-tool-content">
                 <h3>HuggingFace Trainer</h3>
-                <p>A comprehensive training API for PyTorch models. Simplifies training, evaluation, and experimentation with machine learning models while handling distributed training and optimization strategies.</p>
                 <div class="ai-tool-tags">
-                  <span class="ai-tool-tag">Training API</span>
-                  <span class="ai-tool-tag">PyTorch</span>
-                  <span class="ai-tool-tag">Transformers</span>
+                  <span class="ai-tool-tag">Model Training</span>
+                  <span class="ai-tool-tag">API</span>
                 </div>
-                <a href="https://huggingface.co/docs/transformers/main_classes/trainer" target="_blank" rel="noopener noreferrer" class="ai-tool-link">View documentation <i class="fas fa-arrow-right"></i></a>
+                <p>API for efficient fine-tuning of Transformer models for various NLP tasks.</p>
+                <a href="https://huggingface.co/docs/transformers/main_classes/trainer" target="_blank" class="ai-tool-link">Learn more <i class="fas fa-external-link-alt"></i></a>
               </div>
             </div>
             
             <!-- MONAI -->
-            <div class="ai-tool-card" data-aos="fade-up" data-aos-delay="200">
-              <img src="images/monai.svg?v=1" alt="MONAI for Medical AI" class="ai-tool-img">
+            <div class="ai-tool-card" data-aos="fade-up" data-aos-delay="900">
+              <img src="src/images/monai.svg?v=1" alt="MONAI for Medical AI" class="ai-tool-img">
               <div class="ai-tool-content">
                 <h3>MONAI</h3>
-                <p>An open-source framework for healthcare imaging AI built on PyTorch. Developed collaboratively by NVIDIA and King's College London, it provides domain-specific functionality for medical image analysis.</p>
                 <div class="ai-tool-tags">
-                  <span class="ai-tool-tag">Medical Imaging</span>
-                  <span class="ai-tool-tag">NVIDIA</span>
-                  <span class="ai-tool-tag">PyTorch</span>
+                  <span class="ai-tool-tag">Healthcare</span>
+                  <span class="ai-tool-tag">Deep Learning</span>
                 </div>
-                <a href="https://monai.io/" target="_blank" rel="noopener noreferrer" class="ai-tool-link">Discover MONAI <i class="fas fa-arrow-right"></i></a>
+                <p>Framework for deep learning in healthcare imaging, deployed in medical and research settings.</p>
+                <a href="https://monai.io/" target="_blank" class="ai-tool-link">Learn more <i class="fas fa-external-link-alt"></i></a>
               </div>
             </div>
           </div>

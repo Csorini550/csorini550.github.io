@@ -193,8 +193,9 @@ class Navbar extends HTMLElement {
             <a href="#hero">Christopher <span>T. Sorini</span></a>
           </div>
           <div class="nav-links">
-            <a href="#about">My Journey</a>
-            <a href="#ai-tools">Projects</a>
+            <a href="#hero">Home</a>
+            <a href="#about">About</a>
+            <a href="#ai-tools">AI Tools</a>
             <a href="#interests">Interests</a>
             <a href="#experience">Experience</a>
             <a href="#contact">Contact</a>
