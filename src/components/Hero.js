@@ -335,19 +335,19 @@ class Hero extends HTMLElement {
           background: rgba(10, 10, 10, 0.7);
         }
         
-        .tech-badge.llama {
+        .tech-badge.meta {
           width: 55px;
           height: 55px;
           bottom: -15%;
           left: 50%;
           transform: translateX(-50%);
           animation: techGentlePulse 5s ease-in-out infinite 1s;
-          background: rgba(0, 102, 255, 0.1);
+          background: rgba(8, 102, 255, 0.1);
           padding: 6px;
-          border: 1px solid rgba(0, 122, 255, 0.3);
+          border: 1px solid rgba(8, 102, 223, 0.3);
         }
         
-        .tech-badge.llama svg {
+        .tech-badge.meta svg {
           width: 100%;
           height: 100%;
         }
@@ -735,7 +735,7 @@ class Hero extends HTMLElement {
             animation: techGentlePulse 5s ease-in-out infinite;
           }
           
-          .tech-badge.llama {
+          .tech-badge.meta {
             width: 45px;
             height: 45px;
             bottom: -15%;
@@ -838,16 +838,16 @@ class Hero extends HTMLElement {
                   <div class="tech-badge openai">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg" alt="OpenAI">
                   </div>
-                  <div class="tech-badge llama">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%" aria-labelledby="llamaTitle">
-                      <title id="llamaTitle">Meta Llama 3</title>
+                  <div class="tech-badge meta">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%" aria-labelledby="metaTitle">
+                      <title id="metaTitle">Meta</title>
                       <defs>
-                        <linearGradient id="llama-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                          <stop offset="0%" style="stop-color:#0066FF"/>
-                          <stop offset="100%" style="stop-color:#00CCFF"/>
+                        <linearGradient id="meta-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                          <stop offset="0%" style="stop-color:#0081FB"/>
+                          <stop offset="100%" style="stop-color:#0867DF"/>
                         </linearGradient>
                       </defs>
-                      <path fill="url(#llama-gradient)" d="M395.51,256.19c-1.41-5.09-3.92-10.36-7.17-15.15a69.32,69.32,0,0,0-35.2-142H156.36a69.26,69.26,0,0,0-69.19,69.19v80.69c0,1.3.06,2.58.18,3.84a96.48,96.48,0,0,0,45.35,182.69H376.35a86.87,86.87,0,0,0,19.16-171.27ZM353.14,139.07a29.31,29.31,0,1,1-29.31,29.31A29.34,29.34,0,0,1,353.14,139.07Zm-194,0a29.31,29.31,0,1,1-29.32,29.31A29.34,29.34,0,0,1,159.1,139.07Z"/>
+                      <path fill="url(#meta-gradient)" d="M384,256c0,70.7-57.3,128-128,128S128,326.7,128,256s57.3-128,128-128S384,185.3,384,256z M314.1,210.5l-25.5-6.3 c-1.6-0.4-3.4,0.5-3.8,2.1l-3.7,15c-0.4,1.6,0.5,3.4,2.1,3.8l25.5,6.3c1.6,0.4,3.4-0.5,3.8-2.1l3.7-15 C316.6,212.7,315.7,210.9,314.1,210.5z M256,151.6c-57.7,0-104.4,46.9-104.4,104.4c0,14.9,3.2,29.1,8.8,42 c6.2,14.1,22.3,48.8,28.7,62.1c0.9,1.9,2.8,3.1,4.9,3.1h3.9c1.6,0,3.1-0.7,4.1-2l45.7-56.4c1.2-1.5,3-2.3,4.9-2.3h7 c1.9,0,3.7,0.9,4.9,2.3l45.7,56.4c1,1.2,2.5,2,4.1,2h3.9c2.1,0,4-1.2,4.9-3.1c6.4-13.3,22.5-48,28.7-62.1 c5.7-12.9,8.8-27.1,8.8-42C360.4,198.6,313.7,151.6,256,151.6z M229.9,210.5l-25.5,6.3c-1.6,0.4-2.5,2.2-2.1,3.8l3.7,15 c0.4,1.6,2.1,2.5,3.8,2.1l25.5-6.3c1.6-0.4,2.5-2.2,2.1-3.8l-3.7-15C233.2,211,231.5,210.1,229.9,210.5z"/>
                     </svg>
                   </div>
                 </div>
