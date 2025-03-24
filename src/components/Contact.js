@@ -24,12 +24,21 @@ class Contact extends HTMLElement {
   initializeEmailService() {
     console.log(`Initializing email service (attempt ${this.retryCount + 1}/${this.maxRetries})`);
     
-    // Check if EmailJS is already available (from main HTML)
+    // First check if EmailJS was successfully loaded by the main HTML
+    if (window.emailjsLoaded === true && typeof window.emailjs !== 'undefined') {
+      console.log("EmailJS already loaded and initialized by main HTML");
+      this.emailJSLoaded = true;
+      this.setupEventListeners();
+      return;
+    }
+    
+    // Check if EmailJS is available but not marked as loaded
     if (typeof window.emailjs !== 'undefined') {
-      console.log("EmailJS found in global scope");
+      console.log("EmailJS found in global scope, attempting to initialize");
       try {
         window.emailjs.init(this.emailServiceKey);
         this.emailJSLoaded = true;
+        window.emailjsLoaded = true;
         console.log("EmailJS initialized successfully");
         this.setupEventListeners();
       } catch (error) {
@@ -41,6 +50,7 @@ class Contact extends HTMLElement {
       this.loadEmailJS()
         .then(() => {
           console.log("EmailJS loaded and setup complete");
+          window.emailjsLoaded = true;
           this.setupEventListeners();
         })
         .catch(error => {
@@ -98,77 +108,76 @@ class Contact extends HTMLElement {
         }
       }
       
-      // Create a script element for EmailJS
+      // First try to load from CDN
+      this.loadScriptFromSource('https://cdn.emailjs.com/sdk/2.6.4/email.min.js')
+        .then(() => {
+          this.initializeEmailJSAfterLoad(resolve, reject);
+        })
+        .catch(error => {
+          console.warn("Failed to load EmailJS from CDN, trying local fallback", error);
+          
+          // If CDN fails, try local fallback
+          this.loadScriptFromSource('/src/js/vendors/emailjs.min.js')
+            .then(() => {
+              this.initializeEmailJSAfterLoad(resolve, reject);
+            })
+            .catch(fallbackError => {
+              console.error("Local EmailJS fallback also failed:", fallbackError);
+              reject(new Error("All EmailJS loading methods failed"));
+            });
+        });
+    });
+  }
+  
+  // Helper method to load a script from a given source
+  loadScriptFromSource(src) {
+    return new Promise((resolve, reject) => {
       const script = document.createElement('script');
-      script.src = 'https://cdn.emailjs.com/sdk/2.6.4/email.min.js';
+      script.src = src;
       script.type = 'text/javascript';
       script.async = true;
       
-      // Initialize EmailJS when the script is loaded
-      script.onload = () => {
-        try {
-          // Add a small delay to ensure the script is fully processed
-          setTimeout(() => {
-            if (typeof window.emailjs === 'undefined') {
-              console.error("EmailJS script loaded but emailjs is undefined");
-              reject(new Error("EmailJS not defined after script load"));
-              return;
-            }
-            
-            window.emailjs.init(this.emailServiceKey);
-            console.log("EmailJS loaded and initialized successfully");
-            this.emailJSLoaded = true;
-            resolve();
-          }, 500);
-        } catch (error) {
-          console.error("Error initializing EmailJS:", error);
-          reject(error);
-        }
-      };
-      
-      // Add error handling for script loading
-      script.onerror = (error) => {
-        console.error("Failed to load EmailJS script", error);
-        reject(error);
-      };
-      
-      // Set a timeout to reject the promise if loading takes too long
       const timeoutId = setTimeout(() => {
-        reject(new Error("EmailJS script loading timed out"));
+        reject(new Error(`Script loading timed out: ${src}`));
       }, 10000); // 10 seconds timeout
       
-      // Clear timeout when script loads or errors
       script.onload = () => {
         clearTimeout(timeoutId);
-        try {
-          // Add a small delay to ensure the script is fully processed
-          setTimeout(() => {
-            if (typeof window.emailjs === 'undefined') {
-              console.error("EmailJS script loaded but emailjs is undefined");
-              reject(new Error("EmailJS not defined after script load"));
-              return;
-            }
-            
-            window.emailjs.init(this.emailServiceKey);
-            console.log("EmailJS loaded and initialized successfully");
-            this.emailJSLoaded = true;
-            resolve();
-          }, 500);
-        } catch (error) {
-          console.error("Error initializing EmailJS:", error);
-          reject(error);
-        }
+        console.log(`Script loaded successfully: ${src}`);
+        resolve();
       };
       
       script.onerror = (error) => {
         clearTimeout(timeoutId);
-        console.error("Failed to load EmailJS script", error);
+        console.error(`Failed to load script: ${src}`, error);
         reject(error);
       };
       
       // Append to document head for global availability
       document.head.appendChild(script);
     });
+  }
+  
+  // Helper method to initialize EmailJS after script load
+  initializeEmailJSAfterLoad(resolve, reject) {
+    // Add a small delay to ensure the script is fully processed
+    setTimeout(() => {
+      if (typeof window.emailjs === 'undefined') {
+        console.error("EmailJS script loaded but emailjs is undefined");
+        reject(new Error("EmailJS not defined after script load"));
+        return;
+      }
+      
+      try {
+        window.emailjs.init(this.emailServiceKey);
+        console.log("EmailJS loaded and initialized successfully");
+        this.emailJSLoaded = true;
+        resolve();
+      } catch (error) {
+        console.error("Error initializing EmailJS:", error);
+        reject(error);
+      }
+    }, 500);
   }
 
   render() {
