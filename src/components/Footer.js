@@ -9,6 +9,7 @@ class Footer extends HTMLElement {
     this.render();
     this.loadFontAwesome();
     this.setupEventListeners();
+    this.updateCopyrightYear();
   }
 
   loadFontAwesome() {
@@ -285,11 +286,23 @@ class Footer extends HTMLElement {
             </div>
           </div>
           <div class="footer-bottom">
-            <p>&copy; 2023 Christopher T. Sorini. All rights reserved.</p>
+            <p>&copy; 2023-2024 Christopher T. Sorini. All rights reserved.</p>
           </div>
         </div>
       </footer>
     `;
+  }
+
+  // Add a method to update the copyright year dynamically
+  updateCopyrightYear() {
+    const currentYear = new Date().getFullYear();
+    const startYear = 2023;
+    const yearText = startYear < currentYear ? `${startYear}-${currentYear}` : startYear;
+    
+    const copyrightElement = this.shadowRoot.querySelector('.footer-bottom p');
+    if (copyrightElement) {
+      copyrightElement.innerHTML = `&copy; ${yearText} Christopher T. Sorini. All rights reserved.`;
+    }
   }
 }
 
