@@ -1,0 +1,27 @@
+# Audio Demo File Templates
+
+For the PipeCat AI demonstration, you'll need to prepare several audio files:
+
+## 1. welcome-message.wav
+This should be a recording that includes:
+- An introduction in English
+- A showcase of the same voice speaking French
+- Return to English to conclude
+
+Script is available in src/js/welcome-script.js
+
+## 2. english-demo.wav
+A recording of the English text: "I love working with JavaScript, React, Python, and Flask. They're my go-to tools for building powerful web applications."
+
+## 3. french-demo.wav
+A recording of the French text: "J'adore travailler avec JavaScript, React, Python et Flask. Ce sont mes outils préférés pour créer des applications web puissantes."
+
+## 4. cloned-demo.wav
+This will be dynamically generated in a real implementation. For now, a placeholder file would be another version of the English demo with slightly different voice characteristics.
+
+## Implementation Steps
+
+1. Record these files using your voice or a voice actor
+2. Alternatively, use an existing text-to-speech service to generate these files as placeholders
+3. For a production implementation, integrate with the actual PipeCat AI API
+4. Place all WAV files directly in this directory 

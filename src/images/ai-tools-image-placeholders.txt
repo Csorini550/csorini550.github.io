@@ -1,0 +1,66 @@
+# Additional Image Placeholders for AI Tools Section
+
+For the updated AI Tools section, you'll need to prepare these additional images:
+
+## Local Model Deployment
+1. `ollama.jpg` - Represents Ollama local model runner
+   - Simple, clean UI showing terminal or command line interface
+   - Could include the Ollama logo (llama icon)
+   - Size: 600x400px recommended
+
+2. `lm-studio.jpg` - Represents LM Studio application
+   - Screenshot of LM Studio interface
+   - Chat interface with model selection
+   - Size: 600x400px recommended
+
+3. `localai.jpg` - Represents LocalAI project
+   - API server visualization or code snippets
+   - Self-hosting concept visual
+   - Size: 600x400px recommended
+
+## Model Fine-tuning Tools
+4. `nvidia-nemo.jpg` - Represents NVIDIA NeMo
+   - NVIDIA branding with NeMo visualization
+   - Language model training visualization
+   - Size: 600x400px recommended
+
+5. `peft.jpg` - Represents Parameter-Efficient Fine-Tuning methods
+   - Visual showing LoRA or adapter concept
+   - Comparison of full fine-tuning vs parameter-efficient methods
+   - Size: 600x400px recommended
+
+6. `axolotl.jpg` - Represents Axolotl fine-tuning framework
+   - Configuration files or training pipeline visualization
+   - Could include axolotl imagery as a mascot
+   - Size: 600x400px recommended
+
+## Advanced Machine Learning Platforms
+7. `nvidia-enterprise.jpg` - Represents NVIDIA AI Enterprise suite
+   - Enterprise/datacenter imagery
+   - NVIDIA branding with AI visualization
+   - Size: 600x400px recommended
+
+8. `huggingface-trainer.jpg` - Represents HuggingFace Trainer API
+   - HuggingFace logo or branding
+   - Code snippets showing trainer API usage
+   - Size: 600x400px recommended
+
+9. `monai.jpg` - Represents MONAI medical imaging framework
+   - Medical imaging visualization
+   - AI analyzing medical scans
+   - Size: 600x400px recommended
+
+## Image Specifications
+- Dimensions: 600x400px minimum (16:9 or 3:2 ratio recommended)
+- Format: JPG for photos, PNG for graphics with transparency
+- File size: Optimize for web (under 200KB per image)
+- Style: Consistent visual language across all images
+
+## Sources
+You can source these images from:
+1. Official websites/documentation of these tools
+2. Stock photo websites (Unsplash, Pexels, etc.)
+3. AI image generators (DALL-E, Midjourney, etc.)
+4. Create your own graphics using design tools
+
+Place all image files directly in the src/images directory. 

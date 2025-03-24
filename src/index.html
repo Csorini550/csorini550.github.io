@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Christopher Sorini | Software Engineer</title>
+    <meta name="description" content="Portfolio showcasing Christopher Sorini's journey and projects as a software engineer">
+    <link rel="stylesheet" href="css/styles.css">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- AOS - Animate On Scroll Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <!-- Devicon - Tech Stack Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css">
+    <style>
+        /* Basic reset and styles for the main page */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html, body {
+            font-family: 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Component -->
+    <nav-component>
+        <i class="fas fa-bars" slot="toggle-icon"></i>
+    </nav-component>
+    
+    <!-- Hero Component -->
+    <hero-component>
+        <source src="images/chicago_dusk.mp4" type="video/mp4" slot="video-source">
+    </hero-component>
+    
+    <!-- About Component -->
+    <about-component></about-component>
+    
+    <!-- AI Tools Component -->
+    <ai-tools-component></ai-tools-component>
+    
+    <!-- Interests Component -->
+    <interests-component></interests-component>
+    
+    <!-- Experience Component -->
+    <experience-component></experience-component>
+    
+    <!-- Contact Component -->
+    <contact-component></contact-component>
+    
+    <!-- Footer Component -->
+    <footer-component></footer-component>
+
+    <!-- JavaScript -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script type="module" src="js/app.js"></script>
+    <script type="module" src="js/force-reload.js"></script>
+</body>
+</html>

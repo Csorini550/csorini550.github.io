@@ -1,0 +1,24 @@
+# Montana State University Images
+
+To complete the Experience section, please download the following images:
+
+1. **Montana State University Logo (msu-logo.png)**
+   - Official Montana State University logo
+   - Save to: /src/images/msu-logo.png
+   - Recommended size: around 150px wide
+   - Official source: https://www.montana.edu/communications/msu-brand/logo.html
+
+2. **Montana State Bobcat Mascot (msu-bobcat.png)**
+   - The Bobcat mascot image
+   - Save to: /src/images/msu-bobcat.png
+   - Recommended size: around 100px wide
+   - Official source: https://www.montana.edu/bobcats/
+
+Alternatively, you can use the following direct download links for official MSU images:
+
+- MSU Logo: https://www.montana.edu/communications/msu-brand/images/MSU-horiz-color.png
+- Bobcat Athletics Logo: https://msubobcats.com/images/2021/2/17/bobcat_athletics_blue_gold.png
+
+After downloading, make sure the images are in the correct location and have the correct filenames as referenced in the Experience.js component:
+- /src/images/msu-logo.png
+- /src/images/msu-bobcat.png 
