@@ -2,20 +2,55 @@
 class Contact extends HTMLElement {
   constructor() {
     super();
+    this.formSubmitted = false;
+    this.formSubmitting = false;
+    this.formError = false;
+    this.errorMessage = '';
+    this.formSuccess = false;
+    this.recipientName = 'Christopher Sorini'; // Default recipient name
+    this.recipientEmail = 'contact@example.com'; // Default recipient email
+    
     this.attachShadow({ mode: 'open' });
-    console.log('Contact component initialized');
-    
-    // SendGrid configuration - Use GitHub Pages friendly path
-    this.sendGridEndpoint = '/api/send-email';
-    
-    // For GitHub Pages, determine if we're on the actual deployed site
-    // and adjust the endpoint accordingly
-    if (window.location.hostname === 'christophersorini.github.io' || 
-        window.location.hostname.endsWith('github.io')) {
-      // When on GitHub Pages, use a proxy approach or external serverless function
-      // For now, we'll use a GitHub-friendly path approach
-      this.sendGridEndpoint = '/api/send-email';
-      console.log('GitHub Pages detected, using:', this.sendGridEndpoint);
+    this.render();
+    this.setupEventListeners();
+  }
+
+  // Allow email address to be set via attribute
+  static get observedAttributes() {
+    return ['recipient-email', 'recipient-name'];
+  }
+  
+  attributeChangedCallback(name, oldValue, newValue) {
+    if (name === 'recipient-email' && newValue) {
+      this.recipientEmail = newValue;
+      this.updateEmailDisplay();
+    }
+    if (name === 'recipient-name' && newValue) {
+      this.recipientName = newValue;
+    }
+  }
+
+  updateEmailDisplay() {
+    const emailDisplay = this.shadowRoot.querySelector('.info-item .email-display');
+    if (emailDisplay) {
+      emailDisplay.textContent = this.recipientEmail;
+    }
+  }
+
+  checkEmailJSLoaded() {
+    // Check if EmailJS is loaded and ready
+    if (window.emailjsLoaded && typeof emailjs !== 'undefined') {
+      console.log('EmailJS is loaded and ready to use');
+      this.emailJSAvailable = true;
+    } else {
+      console.warn('EmailJS not loaded yet or not available. Form will retry when submitted.');
+      this.emailJSAvailable = false;
+      
+      // Add event listener to check again when EmailJS might be loaded later
+      window.addEventListener('emailjs:loaded', () => {
+        console.log('EmailJS loaded event detected');
+        this.emailJSAvailable = true;
+      });
     }
   }
 
@@ -37,103 +72,53 @@ class Contact extends HTMLElement {
     console.log('Font Awesome loaded');
   }
 
-  // Send email using SendGrid
-  sendWithSendGrid(formData) {
-    console.log("Sending email with SendGrid:", formData);
+  // Send email using EmailJS
+  sendWithEmailJS(formData) {
+    // Get service and template IDs
+    const serviceID = 'service_2uc99iw';
+    const notificationTemplateID = 'template_t1tmmg9'; // Template for notifying the site owner
+    const autoReplyTemplateID = 'template_f8az02j';    // Template for auto-reply to the submitter
     
-    // Create the SendGrid request payload
-    const payload = {
-      personalizations: [
-        {
-          to: [{ email: formData.to_email, name: formData.to_name }],
-          subject: formData.subject
-        }
-      ],
-      from: { email: 'website@christophersorini.com', name: formData.from_name },
-      reply_to: { email: formData.reply_to, name: formData.from_name },
-      content: [
-        {
-          type: 'text/plain',
-          value: `Name: ${formData.name}\nEmail: ${formData.email}\nMessage: ${formData.message}`
-        },
-        {
-          type: 'text/html',
-          value: `<h3>New message from ${formData.name}</h3>
-                  <p><strong>Email:</strong> ${formData.email}</p>
-                  <p><strong>Message:</strong><br>${formData.message.replace(/\n/g, '<br>')}</p>`
-        }
-      ]
+    // Prepare template parameters for EmailJS
+    const templateParams = {
+      from_name: formData.name,
+      reply_to: formData.email,
+      to_name: this.recipientName,
+      to_email: this.recipientEmail,
+      subject: formData.subject,
+      message: formData.message
     };
     
-    console.log("🚀 Request payload:", JSON.stringify(payload, null, 2));
-    console.log("🔗 Sending to endpoint:", this.sendGridEndpoint);
+    // Add submitter's name for the auto-reply template
+    const autoReplyParams = {
+      ...templateParams,
+      to_name: formData.name,      // Override to_name with the submitter's name
+      to_email: formData.email,    // Override to_email with the submitter's email
+      from_name: this.recipientName // Site owner's name as the sender
+    };
     
-    // Determine if we're on GitHub Pages
-    if (window.location.hostname === 'christophersorini.github.io' || 
-        window.location.hostname.endsWith('github.io')) {
-      
-      // When on GitHub Pages, use the global handler
-      console.log("📡 Using GitHub Pages SendGrid handler");
-      
-      // Check if the handler is available
-      if (typeof window.handleSendGridRequest === 'function') {
-        return Promise.resolve()
-          .then(() => window.handleSendGridRequest(payload))
-          .then(response => {
-            console.log("📥 GitHub Pages response:", response);
-            if (!response.success) {
-              return Promise.reject(response);
-            }
-            return response;
-          });
-      } else {
-        console.error("❌ GitHub Pages SendGrid handler not found");
-        return Promise.reject({
-          error: "SendGrid handler not available",
-          details: "The GitHub Pages API handler was not loaded properly."
-        });
-      }
-    }
+    // Log the attempt
+    console.log('Attempting to send emails via EmailJS...');
+    console.log('Admin Notification Parameters:', templateParams);
+    console.log('Auto-Reply Parameters:', autoReplyParams);
     
-    // Standard server approach
-    return fetch(this.sendGridEndpoint, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(payload)
-    })
-    .then(response => {
-      console.log("📥 Response status:", response.status);
-      console.log("📥 Response OK:", response.ok);
-      
-      // Try to get the response text first to debug any non-JSON responses
-      return response.text().then(text => {
-        console.log("📄 Raw response text:", text);
-        
-        // If it's not JSON or empty, return appropriate format
-        if (!text || text.trim() === '') {
-          if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-          }
-          return { message: "Success (no content)" };
-        }
-        
-        // Try to parse as JSON
-        try {
-          const data = JSON.parse(text);
-          if (!response.ok) {
-            return Promise.reject(data);
-          }
-          return data;
-        } catch (e) {
-          console.error("❌ Error parsing JSON response:", e);
-          if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}, Body: ${text}`);
-          }
-          return { message: text };
-        }
+    // Send both emails using Promise.all for better performance
+    return Promise.all([
+      // Send notification to site owner
+      emailjs.send(serviceID, notificationTemplateID, templateParams),
+      // Send auto-reply to form submitter
+      emailjs.send(serviceID, autoReplyTemplateID, autoReplyParams)
+    ])
+    .then(([notificationResponse, autoReplyResponse]) => {
+      console.log('Emails sent successfully!', {
+        notification: notificationResponse,
+        autoReply: autoReplyResponse
       });
+      return { success: true, notificationResponse, autoReplyResponse };
+    })
+    .catch(error => {
+      console.error('Failed to send one or more emails:', error);
+      return { success: false, error };
     });
   }
 
@@ -197,16 +182,14 @@ class Contact extends HTMLElement {
           email: email,
           subject: subject,
           message: message,
-          to_name: "Christopher Sorini",
-          to_email: 'csorini13@gmail.com',
-          from_name: name,
-          reply_to: email
+          to_name: this.recipientName,
+          to_email: this.recipientEmail
         };
         
         console.log("Form data prepared:", formData);
         
-        // Send email with SendGrid
-        this.sendWithSendGrid(formData)
+        // Send email with EmailJS
+        this.sendWithEmailJS(formData)
           .then((response) => {
             console.log("Email sent successfully:", response);
             // Show success message
@@ -217,7 +200,12 @@ class Contact extends HTMLElement {
             console.error('Email error:', error);
             
             // Provide specific error message based on the error type
-            let errorMessage = 'Sorry, there was an error sending your message. Please try again or contact me directly at csorini13@gmail.com.';
+            let errorMessage = `Sorry, there was an error sending your message. Please try again or contact me directly at ${this.recipientEmail}.`;
+            
+            if (error.details && typeof error.details === 'string') {
+              // Add more specific error information if available
+              errorMessage += ' Error details: ' + error.details;
+            }
             
             this.showStatus(statusMessage, errorMessage, 'error');
           })
@@ -614,7 +602,7 @@ class Contact extends HTMLElement {
               <div class="info-container">
                 <div class="info-item">
                   <i class="fas fa-envelope"></i>
-                  <p>csorini13@gmail.com</p>
+                  <p class="email-display">${this.recipientEmail}</p>
                 </div>
                 <div class="info-item">
                   <i class="fas fa-map-marker-alt"></i>

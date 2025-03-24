@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EmailJS Test</title>
+    <!-- EmailJS library -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script type="text/javascript">
+        // Initialize EmailJS with your public key
+        (function() {
+            emailjs.init("zxeSmFLK-CuHM_mKO"); // Use the same public key as in your index.html
+        })();
+        
+        // Configuration
+        const config = {
+            recipientName: "Christopher Sorini",
+            recipientEmail: document.getElementById('recipient-email')?.value || "contact@example.com"
+        };
+        
+        // Update config when recipient email changes
+        function updateRecipientEmail() {
+            config.recipientEmail = document.getElementById('recipient-email').value;
+            console.log("Recipient email updated to:", config.recipientEmail);
+        }
+        
+        // Log EmailJS status
+        console.log("EmailJS initialized");
+        
+        // Function to send test email
+        function sendTestEmail() {
+            // Update recipient email from input field
+            updateRecipientEmail();
+            
+            // Show the loading indicator
+            document.getElementById('status').textContent = 'Sending...';
+            document.getElementById('status').style.color = 'blue';
+            
+            // Get form values
+            const serviceId = document.getElementById('serviceId').value;
+            const templateId = document.getElementById('templateId').value;
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const message = document.getElementById('message').value;
+            
+            // Create template parameters
+            const templateParams = {
+                from_name: name,
+                reply_to: email,
+                to_name: config.recipientName,
+                to_email: config.recipientEmail,
+                subject: 'Test Email from EmailJS Test Page',
+                message: message
+            };
+            
+            // Log parameters
+            console.log("Sending with parameters:", templateParams);
+            console.log("Service ID:", serviceId);
+            console.log("Template ID:", templateId);
+            
+            // Send the email
+            emailjs.send(serviceId, templateId, templateParams)
+                .then(function(response) {
+                    console.log('SUCCESS!', response.status, response.text);
+                    document.getElementById('status').textContent = 'Email sent successfully!';
+                    document.getElementById('status').style.color = 'green';
+                    document.getElementById('result').textContent = JSON.stringify(response, null, 2);
+                }, function(error) {
+                    console.log('FAILED...', error);
+                    document.getElementById('status').textContent = 'Failed to send email!';
+                    document.getElementById('status').style.color = 'red';
+                    document.getElementById('result').textContent = JSON.stringify(error, null, 2);
+                });
+        }
+
+        // Function to test both templates (notification + auto-reply)
+        function testBothTemplates() {
+            // Update recipient email from input field
+            updateRecipientEmail();
+            
+            // Show the loading indicator
+            document.getElementById('status').textContent = 'Sending both emails...';
+            document.getElementById('status').style.color = 'blue';
+            
+            // Get form values
+            const serviceId = document.getElementById('serviceId').value;
+            const notificationTemplateId = document.getElementById('notificationTemplateId').value;
+            const autoReplyTemplateId = document.getElementById('autoReplyTemplateId').value;
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const message = document.getElementById('message').value;
+            
+            // Create template parameters for notification email
+            const notificationParams = {
+                from_name: name,
+                reply_to: email,
+                to_name: config.recipientName,
+                to_email: config.recipientEmail,
+                subject: 'Test Notification Email',
+                message: message
+            };
+            
+            // Create template parameters for auto-reply email
+            const autoReplyParams = {
+                from_name: config.recipientName,
+                reply_to: config.recipientEmail,
+                to_name: name,
+                to_email: email,
+                subject: 'Thank you for contacting us',
+                message: message
+            };
+            
+            // Log parameters
+            console.log("Notification params:", notificationParams);
+            console.log("Auto-reply params:", autoReplyParams);
+            
+            // Send both emails
+            Promise.all([
+                emailjs.send(serviceId, notificationTemplateId, notificationParams),
+                emailjs.send(serviceId, autoReplyTemplateId, autoReplyParams)
+            ])
+            .then(function(responses) {
+                console.log('BOTH SUCCEEDED!', responses);
+                document.getElementById('status').textContent = 'Both emails sent successfully!';
+                document.getElementById('status').style.color = 'green';
+                document.getElementById('result').textContent = JSON.stringify(responses, null, 2);
+            })
+            .catch(function(error) {
+                console.log('ONE OR BOTH FAILED...', error);
+                document.getElementById('status').textContent = 'Failed to send one or both emails!';
+                document.getElementById('status').style.color = 'red';
+                document.getElementById('result').textContent = JSON.stringify(error, null, 2);
+            });
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #3a86ff;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #3a86ff;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #2667cc;
+        }
+        #status {
+            margin-top: 15px;
+            font-weight: bold;
+        }
+        #result {
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #f5f5f5;
+            border-radius: 4px;
+            white-space: pre-wrap;
+        }
+        .instructions {
+            background-color: #f8f9fb;
+            padding: 15px;
+            border-left: 4px solid #3a86ff;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>EmailJS Test</h1>
+    
+    <div class="instructions">
+        <p>This page allows you to test your EmailJS configuration without using the full website.</p>
+        <ol>
+            <li>Enter your EmailJS service ID (from your EmailJS dashboard)</li>
+            <li>Enter your EmailJS template IDs (from your EmailJS dashboard)</li>
+            <li>Enter the recipient email address (where test emails should be sent)</li>
+            <li>Fill out the test form</li>
+            <li>Click either "Send Single Template Test" to test just one template or "Test Both Templates" to test both the notification and auto-reply templates</li>
+        </ol>
+    </div>
+    
+    <div class="form-group">
+        <label for="serviceId">Service ID:</label>
+        <input type="text" id="serviceId" value="service_2uc99iw" placeholder="e.g., service_abc123">
+    </div>
+    
+    <div class="form-group">
+        <label for="templateId">Single Template ID (for testing one template):</label>
+        <input type="text" id="templateId" value="template_t1tmmg9" placeholder="e.g., template_abc123">
+    </div>
+
+    <h3>Both Templates Test</h3>
+    <div class="form-group">
+        <label for="notificationTemplateId">Notification Template ID:</label>
+        <input type="text" id="notificationTemplateId" value="template_t1tmmg9" placeholder="e.g., template_abc123">
+    </div>
+    
+    <div class="form-group">
+        <label for="autoReplyTemplateId">Auto-Reply Template ID:</label>
+        <input type="text" id="autoReplyTemplateId" value="template_f8az02j" placeholder="e.g., template_xyz456">
+    </div>
+    
+    <div class="form-group">
+        <label for="recipient-email">Recipient Email:</label>
+        <input type="email" id="recipient-email" value="" placeholder="Enter the email address to receive the test" onchange="updateRecipientEmail()">
+    </div>
+    
+    <div class="form-group">
+        <label for="name">Your Name:</label>
+        <input type="text" id="name" value="Test User" required>
+    </div>
+    
+    <div class="form-group">
+        <label for="email">Your Email:</label>
+        <input type="email" id="email" value="test@example.com" required>
+    </div>
+    
+    <div class="form-group">
+        <label for="message">Message:</label>
+        <textarea id="message" rows="5" required>This is a test message from the EmailJS test page.</textarea>
+    </div>
+    
+    <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+        <button onclick="sendTestEmail()">Send Single Template Test</button>
+        <button onclick="testBothTemplates()" style="background-color: #2667cc;">Test Both Templates</button>
+    </div>
+    
+    <div id="status"></div>
+    <pre id="result"></pre>
+</body>
+</html> 
