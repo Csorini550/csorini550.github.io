@@ -296,7 +296,7 @@ class Footer extends HTMLElement {
   // Add a method to update the copyright year dynamically
   updateCopyrightYear() {
     const currentYear = new Date().getFullYear();
-    const startYear = 2023;
+    const startYear = 2019;
     const yearText = startYear < currentYear ? `${startYear}-${currentYear}` : startYear;
     
     const copyrightElement = this.shadowRoot.querySelector('.footer-bottom p');
