@@ -17,7 +17,7 @@ class Contact extends HTMLElement {
     this.render();
     this.loadFontAwesome();
     
-    // Initialize email service with retry mechanism
+    // Initialize email service
     this.initializeEmailService();
   }
 
@@ -45,19 +45,11 @@ class Contact extends HTMLElement {
         console.error("Failed to initialize EmailJS:", error);
         this.handleEmailJSInitFailure();
       }
-    } else {
-      // Load EmailJS if not already available
-      this.loadEmailJS()
-        .then(() => {
-          console.log("EmailJS loaded and setup complete");
-          window.emailjsLoaded = true;
-          this.setupEventListeners();
-        })
-        .catch(error => {
-          console.error("Failed to load EmailJS:", error);
-          this.handleEmailJSInitFailure();
-        });
+      return;
     }
+    
+    // If EmailJS is not available at all, load it from the recommended CDN
+    this.loadEmailJS();
   }
 
   handleEmailJSInitFailure() {
@@ -90,94 +82,82 @@ class Contact extends HTMLElement {
   }
 
   loadEmailJS() {
-    console.log('Loading EmailJS script');
+    console.log('Loading EmailJS script from jsDelivr CDN');
     
-    // Return a promise to handle loading status
-    return new Promise((resolve, reject) => {
-      // Check if EmailJS is already loaded
-      if (typeof window.emailjs !== 'undefined') {
-        console.log("EmailJS already available");
-        try {
-          window.emailjs.init(this.emailServiceKey);
-          this.emailJSLoaded = true;
-          resolve();
-          return;
-        } catch (error) {
-          console.error("Error initializing existing EmailJS:", error);
-          // Continue to load fresh script
+    // Use jsDelivr CDN which is more reliable
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js';
+    script.type = 'text/javascript';
+    script.async = true;
+    
+    script.onload = () => {
+      console.log('EmailJS script loaded from CDN');
+      // Initialize EmailJS after a short delay to ensure it's fully loaded
+      setTimeout(() => {
+        if (typeof window.emailjs !== 'undefined') {
+          try {
+            window.emailjs.init(this.emailServiceKey);
+            console.log("EmailJS initialized successfully after CDN load");
+            this.emailJSLoaded = true;
+            window.emailjsLoaded = true;
+            this.setupEventListeners();
+          } catch (error) {
+            console.error("Failed to initialize EmailJS after CDN load:", error);
+            this.loadLocalEmailJS();
+          }
+        } else {
+          console.error("EmailJS not defined after script load");
+          this.loadLocalEmailJS();
         }
-      }
-      
-      // First try to load from CDN
-      this.loadScriptFromSource('https://cdn.emailjs.com/sdk/2.6.4/email.min.js')
-        .then(() => {
-          this.initializeEmailJSAfterLoad(resolve, reject);
-        })
-        .catch(error => {
-          console.warn("Failed to load EmailJS from CDN, trying local fallback", error);
-          
-          // If CDN fails, try local fallback
-          this.loadScriptFromSource('/src/js/vendors/emailjs.min.js')
-            .then(() => {
-              this.initializeEmailJSAfterLoad(resolve, reject);
-            })
-            .catch(fallbackError => {
-              console.error("Local EmailJS fallback also failed:", fallbackError);
-              reject(new Error("All EmailJS loading methods failed"));
-            });
-        });
-    });
+      }, 500);
+    };
+    
+    script.onerror = () => {
+      console.error('Failed to load EmailJS from CDN');
+      this.loadLocalEmailJS();
+    };
+    
+    // Add to document head for global availability
+    document.head.appendChild(script);
   }
   
-  // Helper method to load a script from a given source
-  loadScriptFromSource(src) {
-    return new Promise((resolve, reject) => {
-      const script = document.createElement('script');
-      script.src = src;
-      script.type = 'text/javascript';
-      script.async = true;
-      
-      const timeoutId = setTimeout(() => {
-        reject(new Error(`Script loading timed out: ${src}`));
-      }, 10000); // 10 seconds timeout
-      
-      script.onload = () => {
-        clearTimeout(timeoutId);
-        console.log(`Script loaded successfully: ${src}`);
-        resolve();
-      };
-      
-      script.onerror = (error) => {
-        clearTimeout(timeoutId);
-        console.error(`Failed to load script: ${src}`, error);
-        reject(error);
-      };
-      
-      // Append to document head for global availability
-      document.head.appendChild(script);
-    });
-  }
-  
-  // Helper method to initialize EmailJS after script load
-  initializeEmailJSAfterLoad(resolve, reject) {
-    // Add a small delay to ensure the script is fully processed
-    setTimeout(() => {
-      if (typeof window.emailjs === 'undefined') {
-        console.error("EmailJS script loaded but emailjs is undefined");
-        reject(new Error("EmailJS not defined after script load"));
-        return;
-      }
-      
-      try {
-        window.emailjs.init(this.emailServiceKey);
-        console.log("EmailJS loaded and initialized successfully");
-        this.emailJSLoaded = true;
-        resolve();
-      } catch (error) {
-        console.error("Error initializing EmailJS:", error);
-        reject(error);
-      }
-    }, 500);
+  loadLocalEmailJS() {
+    console.log('Attempting to load EmailJS from local fallback');
+    const script = document.createElement('script');
+    // Use the correct path to the local file - remove leading slash if needed
+    script.src = 'js/vendors/emailjs.min.js';
+    script.type = 'text/javascript';
+    script.async = true;
+    
+    script.onload = () => {
+      console.log('EmailJS script loaded from local fallback');
+      // Initialize EmailJS after a short delay
+      setTimeout(() => {
+        if (typeof window.emailjs !== 'undefined') {
+          try {
+            window.emailjs.init(this.emailServiceKey);
+            console.log("EmailJS initialized successfully after local load");
+            this.emailJSLoaded = true;
+            window.emailjsLoaded = true;
+            this.setupEventListeners();
+          } catch (error) {
+            console.error("Failed to initialize EmailJS after local load:", error);
+            this.handleEmailJSInitFailure();
+          }
+        } else {
+          console.error("EmailJS not defined after local script load");
+          this.handleEmailJSInitFailure();
+        }
+      }, 500);
+    };
+    
+    script.onerror = () => {
+      console.error('Failed to load EmailJS from local fallback');
+      this.handleEmailJSInitFailure();
+    };
+    
+    // Add to document head for global availability
+    document.head.appendChild(script);
   }
 
   render() {
@@ -628,8 +608,8 @@ class Contact extends HTMLElement {
             
             console.log("Sending email with data:", formData);
             
-            // Send email using EmailJS
-            return window.emailjs.send(this.serviceID, this.templateID, formData);
+            // Send email using EmailJS - make sure we use the send method correctly
+            return window.emailjs.send(this.serviceID, this.templateID, formData, this.emailServiceKey);
           })
           .then((response) => {
             console.log("Email sent successfully:", response);
@@ -648,6 +628,9 @@ class Contact extends HTMLElement {
             } else if (error.message === "Form validation failed" || error.message === "Invalid email format") {
               // Validation errors already handled
               return;
+            } else if (error.text) {
+              // If there's a specific error text from EmailJS
+              errorMessage = `Email error: ${error.text}. Please contact me directly at csorini13@gmail.com.`;
             }
             
             this.showStatus(statusMessage, errorMessage, 'error');
@@ -665,7 +648,7 @@ class Contact extends HTMLElement {
     }
   }
   
-  // New method to verify EmailJS is ready
+  // Method to verify EmailJS is ready
   verifyEmailService() {
     return new Promise((resolve) => {
       // If EmailJS was already loaded successfully
@@ -689,16 +672,41 @@ class Contact extends HTMLElement {
         return;
       }
       
-      // If EmailJS doesn't exist, try loading it one more time
-      this.loadEmailJS()
-        .then(() => {
-          console.log("EmailJS loaded during verification");
-          resolve(true);
-        })
-        .catch(error => {
-          console.error("EmailJS loading failed during verification:", error);
-          resolve(false);
-        });
+      // If EmailJS doesn't exist at all, try loading it once more
+      console.log("EmailJS not available, attempting one final load");
+      const script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js';
+      script.type = 'text/javascript';
+      script.async = true;
+      
+      const timeoutId = setTimeout(() => {
+        console.error("EmailJS load timed out during verification");
+        resolve(false);
+      }, 5000);
+      
+      script.onload = () => {
+        clearTimeout(timeoutId);
+        console.log("EmailJS loaded during verification");
+        setTimeout(() => {
+          try {
+            window.emailjs.init(this.emailServiceKey);
+            this.emailJSLoaded = true;
+            console.log("EmailJS initialized during verification");
+            resolve(true);
+          } catch (error) {
+            console.error("EmailJS init failed during verification:", error);
+            resolve(false);
+          }
+        }, 500);
+      };
+      
+      script.onerror = () => {
+        clearTimeout(timeoutId);
+        console.error("EmailJS failed to load during verification");
+        resolve(false);
+      };
+      
+      document.head.appendChild(script);
     });
   }
   
