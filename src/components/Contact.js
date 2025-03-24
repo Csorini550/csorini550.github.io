@@ -612,8 +612,8 @@ class Contact extends HTMLElement {
             
             console.log("Sending email with data:", formData);
             
-            // Send email using EmailJS - make sure we use the send method correctly
-            return window.emailjs.send(this.serviceID, this.templateID, formData);
+            // Send email using EmailJS - Use API key explicitly in the send method
+            return window.emailjs.send(this.serviceID, this.templateID, formData, this.emailServiceKey);
           })
           .then((response) => {
             console.log("Email sent successfully:", response);
