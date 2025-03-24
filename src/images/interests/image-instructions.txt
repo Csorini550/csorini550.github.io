@@ -1,0 +1,44 @@
+# Interest Images Instructions
+
+Your website is currently using online placeholder images for the interests section. To replace these with actual images that represent your interests, follow these steps:
+
+## Current Placeholder Images:
+- Skiing: https://placehold.co/600x400/3a86ff/FFFFFF?text=Skiing
+- Fly Fishing: https://placehold.co/600x400/38b000/FFFFFF?text=Fly+Fishing
+- Hiking: https://placehold.co/600x400/9d4edd/FFFFFF?text=Hiking
+- Travel: https://placehold.co/600x400/ff7b00/FFFFFF?text=Travel
+
+## To replace with your own images:
+
+1. Add your images to this directory (`src/images/interests/`) with the following names:
+   - skiing.jpg
+   - fly-fishing.jpg
+   - hiking.jpg
+   - travel.jpg
+
+2. Then, update the Interests.js component in `src/components/Interests.js` to use your local images:
+   ```js
+   <img src="images/interests/skiing.jpg" alt="Skiing in Montana" class="interest-image">
+   <img src="images/interests/fly-fishing.jpg" alt="Fly fishing in a mountain stream" class="interest-image">
+   <img src="images/interests/hiking.jpg" alt="Hiking in the mountains" class="interest-image">
+   <img src="images/interests/travel.jpg" alt="International travel destinations" class="interest-image">
+   ```
+
+## Image Recommendations:
+
+- Use high-quality images with good resolution (at least 800x600 pixels)
+- Choose landscape orientation for better fitting in the cards
+- Pick images that represent your personal experiences if possible
+- Images with good lighting and vibrant colors will enhance the visual appeal
+
+## Where to Find Images:
+
+1. Your personal photo collection (best option for authenticity)
+2. Free stock photo sites if needed:
+   - Unsplash (https://unsplash.com)
+   - Pexels (https://pexels.com)
+   - Pixabay (https://pixabay.com)
+
+## After Adding Images:
+
+Once you've added these images to the `/src/images/interests/` directory, your website will display them automatically in the interests section, making it more visually appealing and personal.

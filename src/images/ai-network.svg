@@ -1,0 +1,123 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800">
+  <style>
+    .node {
+      fill: #3a86ff;
+      stroke: white;
+      stroke-width: 2;
+      transition: all 0.3s ease;
+    }
+    .node-important {
+      fill: #ff006e;
+    }
+    .node-secondary {
+      fill: #8338ec;
+    }
+    .connection {
+      stroke: rgba(58, 134, 255, 0.6);
+      stroke-width: 2;
+      stroke-dasharray: 10;
+      animation: flow 3s linear infinite;
+    }
+    .connection-important {
+      stroke: rgba(255, 0, 110, 0.6);
+      animation: flow 2s linear infinite;
+    }
+    .connection-secondary {
+      stroke: rgba(131, 56, 236, 0.6);
+      animation: flow 4s linear infinite;
+    }
+    @keyframes flow {
+      to {
+        stroke-dashoffset: 100;
+      }
+    }
+    .pulse {
+      animation: pulse 3s ease-in-out infinite;
+      transform-origin: center;
+      transform-box: fill-box;
+    }
+    .pulse-fast {
+      animation: pulse 2s ease-in-out infinite;
+    }
+    .pulse-slow {
+      animation: pulse 4s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.2); opacity: 0.8; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .glow {
+      filter: url(#glow);
+    }
+  </style>
+  
+  <defs>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="5" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Center node (AI core) -->
+  <circle class="node node-important glow pulse" cx="400" cy="400" r="40" />
+  
+  <!-- First layer nodes -->
+  <circle class="node glow pulse-slow" cx="250" cy="300" r="25" />
+  <circle class="node node-secondary glow pulse-fast" cx="550" cy="300" r="25" />
+  <circle class="node glow pulse" cx="300" cy="550" r="25" />
+  <circle class="node node-secondary glow pulse-slow" cx="500" cy="550" r="25" />
+  <circle class="node node-secondary glow pulse" cx="250" cy="500" r="25" />
+  <circle class="node glow pulse-fast" cx="550" cy="500" r="25" />
+  
+  <!-- Second layer nodes -->
+  <circle class="node glow pulse-slow" cx="150" cy="200" r="15" />
+  <circle class="node node-secondary glow pulse" cx="650" cy="200" r="15" />
+  <circle class="node node-secondary glow pulse-fast" cx="200" cy="650" r="15" />
+  <circle class="node glow pulse" cx="600" cy="650" r="15" />
+  <circle class="node glow pulse-fast" cx="150" cy="600" r="15" />
+  <circle class="node node-secondary glow pulse-slow" cx="650" cy="600" r="15" />
+  <circle class="node glow pulse" cx="200" cy="150" r="15" />
+  <circle class="node node-secondary glow pulse-fast" cx="600" cy="150" r="15" />
+  
+  <!-- Third layer nodes -->
+  <circle class="node node-secondary glow pulse" cx="100" cy="350" r="10" />
+  <circle class="node glow pulse-slow" cx="700" cy="350" r="10" />
+  <circle class="node glow pulse-fast" cx="350" cy="100" r="10" />
+  <circle class="node node-secondary glow pulse" cx="350" cy="700" r="10" />
+  <circle class="node glow pulse-slow" cx="100" cy="450" r="10" />
+  <circle class="node node-secondary glow pulse-fast" cx="700" cy="450" r="10" />
+  <circle class="node node-secondary glow pulse" cx="450" cy="100" r="10" />
+  <circle class="node glow pulse-slow" cx="450" cy="700" r="10" />
+  
+  <!-- Connections from center to first layer -->
+  <line class="connection" x1="400" y1="400" x2="250" y2="300" />
+  <line class="connection-important" x1="400" y1="400" x2="550" y2="300" />
+  <line class="connection-secondary" x1="400" y1="400" x2="300" y2="550" />
+  <line class="connection" x1="400" y1="400" x2="500" y2="550" />
+  <line class="connection-important" x1="400" y1="400" x2="250" y2="500" />
+  <line class="connection-secondary" x1="400" y1="400" x2="550" y2="500" />
+  
+  <!-- Connections from first to second layer -->
+  <line class="connection-secondary" x1="250" y1="300" x2="150" y2="200" />
+  <line class="connection" x1="550" y1="300" x2="650" y2="200" />
+  <line class="connection-important" x1="300" y1="550" x2="200" y2="650" />
+  <line class="connection-secondary" x1="500" y1="550" x2="600" y2="650" />
+  <line class="connection" x1="250" y1="500" x2="150" y2="600" />
+  <line class="connection-important" x1="550" y1="500" x2="650" y2="600" />
+  <line class="connection-secondary" x1="250" y1="300" x2="200" y2="150" />
+  <line class="connection" x1="550" y1="300" x2="600" y2="150" />
+  
+  <!-- Connections to third layer -->
+  <line class="connection-important" x1="250" y1="300" x2="100" y2="350" />
+  <line class="connection-secondary" x1="550" y1="300" x2="700" y2="350" />
+  <line class="connection" x1="250" y1="300" x2="350" y2="100" />
+  <line class="connection-important" x1="550" y1="300" x2="350" y2="700" />
+  <line class="connection-secondary" x1="250" y1="500" x2="100" y2="450" />
+  <line class="connection" x1="550" y1="500" x2="700" y2="450" />
+  <line class="connection-important" x1="250" y1="500" x2="450" y2="100" />
+  <line class="connection-secondary" x1="550" y1="500" x2="450" y2="700" />
+</svg> 

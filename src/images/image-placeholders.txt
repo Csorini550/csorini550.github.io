@@ -1,0 +1,35 @@
+# Image Placeholders for AI Tools
+
+For the AI Tools section, you'll need to prepare these images:
+
+## 1. pipecat-ai.jpg
+An image representing voice cloning technology. Ideal imagery might include:
+- Sound waves or audio visualizations
+- A profile silhouette with voice indicators
+- Modern, tech-forward design with purple/blue tones
+
+## 2. code-assistant.jpg
+An image representing coding assistance technology. Consider:
+- Code snippets or IDE screenshots
+- AI helping with code completion
+- Developer workspace with AI elements
+
+## 3. data-analyzer.jpg
+An image representing data analysis technology. Options include:
+- Data visualizations like charts or graphs
+- Dashboard interfaces
+- Data flow or processing imagery
+
+## Image Specifications
+- Dimensions: 600x400px minimum (16:9 or 3:2 ratio recommended)
+- Format: JPG for photos, PNG for graphics with transparency
+- File size: Optimize for web (under 200KB per image)
+- Style: Consistent visual language across all images
+
+## Sources
+You can source these images from:
+1. Stock photo websites (Unsplash, Pexels, etc.)
+2. AI image generators (DALL-E, Midjourney, etc.)
+3. Create your own graphics using design tools
+
+Place all image files directly in the src/images directory. 

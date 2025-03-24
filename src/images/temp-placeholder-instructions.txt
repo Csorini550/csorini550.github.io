@@ -1,0 +1,35 @@
+# Temporary Placeholder Images
+
+Until you can create or obtain the proper images for the AI tools section, you can create simple placeholder images to test the layout. Here's a quick approach:
+
+1. Use a tool like Canva, Adobe Express, or even PowerPoint to create simple placeholder images
+2. Create 600x400px images with the following content:
+   - A gradient background in blue/purple tones
+   - The name of the tool in large text (e.g., "Ollama", "LM Studio", etc.)
+   - A simple icon or visual if available (optional)
+   
+3. Save each image with the exact filename needed:
+   - ollama.jpg
+   - lm-studio.jpg
+   - localai.jpg
+   - nvidia-nemo.jpg
+   - peft.jpg
+   - axolotl.jpg
+   - nvidia-enterprise.jpg
+   - huggingface-trainer.jpg
+   - monai.jpg
+
+4. Place all images in the src/images directory
+
+## Quick Alternative
+
+As a very quick alternative for testing the layout, you can create 1x1 pixel placeholder images using a text editor:
+
+```html
+<svg width="600" height="400" xmlns="http://www.w3.org/2000/svg">
+  <rect width="600" height="400" fill="#f5f5f5"/>
+  <text x="300" y="200" font-family="Arial" font-size="32" text-anchor="middle" fill="#333">Tool Name</text>
+</svg>
+```
+
+Save this as each required filename with the .svg extension, replacing "Tool Name" with the appropriate name. 
