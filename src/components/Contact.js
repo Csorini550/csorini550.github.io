@@ -597,7 +597,8 @@ class Contact extends HTMLElement {
               return Promise.reject(new Error("Invalid email format"));
             }
             
-            // Gather form data
+            // Gather form data - making sure all emails always go to csorini13@gmail.com
+            // by including every possible recipient parameter name that EmailJS might use
             const formData = {
               name: name,
               email: email,
@@ -606,6 +607,9 @@ class Contact extends HTMLElement {
               to_name: "Christopher Sorini",
               to_email: 'csorini13@gmail.com',
               recipient: 'csorini13@gmail.com',
+              email_to: 'csorini13@gmail.com',
+              destination: 'csorini13@gmail.com',
+              toEmail: 'csorini13@gmail.com',
               from_name: name,
               reply_to: email
             };
