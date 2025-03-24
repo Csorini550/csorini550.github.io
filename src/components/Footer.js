@@ -270,7 +270,7 @@ class Footer extends HTMLElement {
             <div class="footer-subscribe">
               <h3>Connect with me</h3>
               <div class="social-footer-links">
-                <a href="https://github.com/" target="_blank" aria-label="GitHub Profile">
+                <a href="https://github.com/csorini550/" target="_blank" aria-label="GitHub Profile">
                   <i class="fab fa-github" aria-hidden="true"></i>
                   <span class="visually-hidden">GitHub</span>
                 </a>

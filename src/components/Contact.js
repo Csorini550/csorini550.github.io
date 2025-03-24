@@ -622,7 +622,7 @@ class Contact extends HTMLElement {
                 <div class="social-links-container">
                   <p class="social-links-title">Let's connect:</p>
                   <div class="social-links">
-                    <a href="https://github.com/" target="_blank" aria-label="GitHub Profile">
+                    <a href="https://github.com/csorini550/" target="_blank" aria-label="GitHub Profile">
                       <i class="fab fa-github" aria-hidden="true"></i>
                       <span class="visually-hidden">GitHub</span>
                     </a>
