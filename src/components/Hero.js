@@ -347,7 +347,7 @@ class Hero extends HTMLElement {
           border: 1px solid rgba(8, 102, 223, 0.3);
         }
         
-        .tech-badge.meta svg {
+        .tech-badge.meta img {
           width: 100%;
           height: 100%;
         }
@@ -839,16 +839,7 @@ class Hero extends HTMLElement {
                     <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg" alt="OpenAI">
                   </div>
                   <div class="tech-badge meta">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="100%" height="100%" aria-labelledby="metaTitle">
-                      <title id="metaTitle">Meta</title>
-                      <defs>
-                        <linearGradient id="meta-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                          <stop offset="0%" style="stop-color:#0866FF"/>
-                          <stop offset="100%" style="stop-color:#0866FF"/>
-                        </linearGradient>
-                      </defs>
-                      <path fill="url(#meta-gradient)" d="M12,2C6.477,2,2,6.477,2,12c0,5.523,4.477,10,10,10s10-4.477,10-10C22,6.477,17.523,2,12,2z M15.71,14.2L14.18,9.39h-1.5 l-1.46,4.83h1.5l0.93-3.58l0.94,3.58h1.37l1.31-4.83h-1.49L15.71,14.2z M6.41,9.39l2.91,4.83h1.48L7.89,9.39H6.41z M10.01,9.39 H8.53l-1.49,4.83h1.49L10.01,9.39z"/>
-                    </svg>
+                    <img src="src/images/meta.png" alt="Meta">
                   </div>
                 </div>
               </div>
