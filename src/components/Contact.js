@@ -10,6 +10,10 @@ class Contact extends HTMLElement {
     this.templateID = "template_pplvcfl";
     this.maxRetries = 3;
     this.retryCount = 0;
+    
+    // SendGrid configuration
+    this.useSendGrid = false; // Set to true to use SendGrid instead of EmailJS
+    this.sendGridAPIKey = "YOUR_SENDGRID_API_KEY"; // Replace with your actual SendGrid API key
   }
 
   connectedCallback() {
@@ -542,6 +546,43 @@ class Contact extends HTMLElement {
     `;
   }
 
+  // New method to send email using SendGrid
+  sendWithSendGrid(formData) {
+    console.log("Attempting to send with SendGrid:", formData);
+    
+    // Construct the SendGrid API request
+    const sendGridData = {
+      personalizations: [{
+        to: [{ email: 'csorini13@gmail.com', name: 'Christopher Sorini' }],
+        subject: formData.subject
+      }],
+      from: { email: formData.email, name: formData.name },
+      reply_to: { email: formData.email, name: formData.name },
+      content: [{
+        type: 'text/plain',
+        value: formData.message
+      }]
+    };
+    
+    // Make the fetch request to SendGrid's API
+    return fetch('https://api.sendgrid.com/v3/mail/send', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${this.sendGridAPIKey}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(sendGridData)
+    })
+    .then(response => {
+      if (!response.ok) {
+        return response.json().then(data => {
+          throw new Error(data.errors ? data.errors[0].message : 'Failed to send email via SendGrid');
+        });
+      }
+      return { status: 'Email sent successfully via SendGrid' };
+    });
+  }
+
   setupEventListeners() {
     const form = this.shadowRoot.querySelector('#contact-form');
     if (form) {
@@ -572,53 +613,68 @@ class Contact extends HTMLElement {
           return;
         }
         
-        // Verify EmailJS is ready
-        this.verifyEmailService()
-          .then(isReady => {
-            if (!isReady) {
-              throw new Error("Email service is not ready");
-            }
-            
-            // Validate form data
-            const name = form.querySelector('#name').value.trim();
-            const email = form.querySelector('#email').value.trim();
-            const subject = form.querySelector('#subject').value.trim();
-            const message = form.querySelector('#message').value.trim();
-            
-            if (!name || !email || !subject || !message) {
-              this.showStatus(statusMessage, 'Please fill out all fields.', 'error');
-              return Promise.reject(new Error("Form validation failed"));
-            }
-            
-            // Validate email format
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(email)) {
-              this.showStatus(statusMessage, 'Please enter a valid email address.', 'error');
-              return Promise.reject(new Error("Invalid email format"));
-            }
-            
-            // Gather form data - making sure all emails always go to csorini13@gmail.com
-            // by including every possible recipient parameter name that EmailJS might use
-            const formData = {
-              name: name,
-              email: email,
-              subject: subject,
-              message: message,
-              to_name: "Christopher Sorini",
-              to_email: 'csorini13@gmail.com',
-              recipient: 'csorini13@gmail.com',
-              email_to: 'csorini13@gmail.com',
-              destination: 'csorini13@gmail.com',
-              toEmail: 'csorini13@gmail.com',
-              from_name: name,
-              reply_to: email
-            };
-            
-            console.log("Sending email with data:", formData);
-            
-            // Send email using EmailJS - Use API key explicitly in the send method
-            return window.emailjs.send(this.serviceID, this.templateID, formData, this.emailServiceKey);
-          })
+        // Validate form data
+        const name = form.querySelector('#name').value.trim();
+        const email = form.querySelector('#email').value.trim();
+        const subject = form.querySelector('#subject').value.trim();
+        const message = form.querySelector('#message').value.trim();
+        
+        if (!name || !email || !subject || !message) {
+          this.showStatus(statusMessage, 'Please fill out all fields.', 'error');
+          submitButton.textContent = originalButtonText;
+          submitButton.disabled = false;
+          if (sendingOverlay) sendingOverlay.style.display = 'none';
+          return;
+        }
+        
+        // Validate email format
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+          this.showStatus(statusMessage, 'Please enter a valid email address.', 'error');
+          submitButton.textContent = originalButtonText;
+          submitButton.disabled = false;
+          if (sendingOverlay) sendingOverlay.style.display = 'none';
+          return;
+        }
+        
+        // Gather form data
+        const formData = {
+          name: name,
+          email: email,
+          subject: subject,
+          message: message,
+          to_name: "Christopher Sorini",
+          to_email: 'csorini13@gmail.com',
+          recipient: 'csorini13@gmail.com',
+          email_to: 'csorini13@gmail.com',
+          destination: 'csorini13@gmail.com',
+          toEmail: 'csorini13@gmail.com',
+          from_name: name,
+          reply_to: email
+        };
+        
+        console.log("Form data prepared:", formData);
+        
+        // Choose which email service to use
+        let emailPromise;
+        
+        if (this.useSendGrid) {
+          // Use SendGrid
+          emailPromise = this.sendWithSendGrid(formData);
+        } else {
+          // Use EmailJS
+          emailPromise = this.verifyEmailService()
+            .then(isReady => {
+              if (!isReady) {
+                throw new Error("Email service is not ready");
+              }
+              console.log("Sending email with data:", formData);
+              return window.emailjs.send(this.serviceID, this.templateID, formData, this.emailServiceKey);
+            });
+        }
+        
+        // Process the response
+        emailPromise
           .then((response) => {
             console.log("Email sent successfully:", response);
             // Show success message
