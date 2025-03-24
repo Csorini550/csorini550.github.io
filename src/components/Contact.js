@@ -82,19 +82,27 @@ class Contact extends HTMLElement {
     // Prepare template parameters for EmailJS
     const templateParams = {
       from_name: formData.name,
+      user_name: formData.name,     // Explicitly define user_name for template use
       reply_to: formData.email,
+      user_email: formData.email,   // Explicitly define user_email for template use
       to_name: this.recipientName,
       to_email: this.recipientEmail,
-      subject: formData.subject,
-      message: formData.message
+      subject: formData.subject,    // Original subject from the form
+      message: formData.message,
+      user_subject: formData.subject // Also include as user_subject for template flexibility
     };
     
     // Add submitter's name for the auto-reply template
     const autoReplyParams = {
-      ...templateParams,
-      to_name: formData.name,      // Override to_name with the submitter's name
-      to_email: formData.email,    // Override to_email with the submitter's email
-      from_name: this.recipientName // Site owner's name as the sender
+      from_name: this.recipientName, // Site owner's name as the sender
+      reply_to: this.recipientEmail, // Site owner's email for replies
+      to_name: formData.name,        // Submitter's name
+      user_name: formData.name,      // Explicitly define user_name for template use
+      to_email: formData.email,      // Submitter's email
+      user_email: formData.email,    // Explicitly define user_email for template use
+      subject: `Thank you for contacting ${this.recipientName}`, // Custom subject for auto-reply
+      message: formData.message,     // Original message for reference
+      user_subject: formData.subject // Original subject preserved as user_subject
     };
     
     // Log the attempt

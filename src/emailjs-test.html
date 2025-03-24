@@ -46,11 +46,14 @@
             // Create template parameters
             const templateParams = {
                 from_name: name,
+                user_name: name,
                 reply_to: email,
+                user_email: email,
                 to_name: config.recipientName,
                 to_email: config.recipientEmail,
                 subject: 'Test Email from EmailJS Test Page',
-                message: message
+                message: message,
+                user_subject: 'Test Email from EmailJS Test Page'
             };
             
             // Log parameters
@@ -93,11 +96,14 @@
             // Create template parameters for notification email
             const notificationParams = {
                 from_name: name,
+                user_name: name,
                 reply_to: email,
+                user_email: email,
                 to_name: config.recipientName,
                 to_email: config.recipientEmail,
                 subject: 'Test Notification Email',
-                message: message
+                message: message,
+                user_subject: 'Test Notification Email'
             };
             
             // Create template parameters for auto-reply email
@@ -105,9 +111,12 @@
                 from_name: config.recipientName,
                 reply_to: config.recipientEmail,
                 to_name: name,
+                user_name: name,
                 to_email: email,
-                subject: 'Thank you for contacting us',
-                message: message
+                user_email: email,
+                subject: `Thank you for contacting ${config.recipientName}`,
+                message: message,
+                user_subject: 'Test Notification Email'
             };
             
             // Log parameters
