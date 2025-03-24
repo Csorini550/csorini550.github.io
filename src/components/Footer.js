@@ -235,6 +235,20 @@ class Footer extends HTMLElement {
             flex-direction: column;
             gap: 32px;
           }
+          
+          .container {
+            width: 95%;
+            padding: 16px 10px;
+          }
+          
+          .footer-links-section, .footer-links {
+            padding-left: 8px;
+            width: 100%;
+          }
+          
+          .footer-logo, .footer-subscribe {
+            padding-left: 8px;
+          }
         }
         
         .visually-hidden {

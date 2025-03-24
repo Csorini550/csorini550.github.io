@@ -565,6 +565,28 @@ class Contact extends HTMLElement {
           .section-header h2 {
             font-size: 1.8rem;
           }
+          
+          .container {
+            width: 95%;
+            padding: 16px 10px;
+          }
+          
+          .contact-form, .contact-info {
+            padding-left: 8px;
+            padding-right: 8px;
+          }
+          
+          .info-item {
+            padding-left: 8px;
+          }
+          
+          .info-container {
+            max-width: calc(100% - 100px);
+          }
+          
+          .social-links a {
+            margin-left: 4px;
+          }
         }
       </style>
       
