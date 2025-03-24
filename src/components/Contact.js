@@ -31,7 +31,13 @@ class Contact extends HTMLElement {
     // Initialize EmailJS when the script is loaded
     script.onload = () => {
       // Initialize with your EmailJS public key
-      emailjs.init("zxeSmFLK-CuHM_mKO");
+      window.emailjs.init("zxeSmFLK-CuHM_mKO");
+      console.log("EmailJS initialized successfully");
+    };
+    
+    // Add error handling for script loading
+    script.onerror = () => {
+      console.error("Failed to load EmailJS script");
     };
     
     // Append it to the shadow root
@@ -383,9 +389,21 @@ class Contact extends HTMLElement {
           to_email: 'csorini13@gmail.com'
         };
         
+        console.log("Attempting to send email with data:", data);
+        
+        // Make sure emailjs is available in the global scope
+        if (typeof window.emailjs === 'undefined') {
+          console.error("EmailJS is not loaded properly");
+          alert('Sorry, the email service is not loaded properly. Please try again later or contact me directly at csorini13@gmail.com.');
+          submitButton.textContent = originalButtonText;
+          submitButton.disabled = false;
+          return;
+        }
+        
         // Send email using EmailJS with the provided service ID and template ID
-        emailjs.send('service_eh0jpbf', 'template_ppvcfl', data)
-          .then(() => {
+        window.emailjs.send('service_eh0jpbf', 'template_ppvcfl', data)
+          .then((response) => {
+            console.log("Email sent successfully:", response);
             // Show success message
             alert('Thank you for your message! I will get back to you soon.');
             form.reset();
