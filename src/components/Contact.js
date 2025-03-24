@@ -13,7 +13,7 @@ class Contact extends HTMLElement {
     
     // SendGrid configuration
     this.useSendGrid = true; // Set to true to use SendGrid instead of EmailJS
-    this.sendGridAPIKey = "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"; // Replace with your actual SendGrid API key
+    // API key removed for security - we'll use EmailJS instead of direct SendGrid API
   }
 
   connectedCallback() {
@@ -546,41 +546,22 @@ class Contact extends HTMLElement {
     `;
   }
 
-  // New method to send email using SendGrid
+  // Modified method to use EmailJS as a secure proxy for SendGrid
   sendWithSendGrid(formData) {
-    console.log("Attempting to send with SendGrid:", formData);
+    console.log("Using EmailJS as a secure proxy for SendGrid:", formData);
     
-    // Construct the SendGrid API request
-    const sendGridData = {
-      personalizations: [{
-        to: [{ email: 'csorini13@gmail.com', name: 'Christopher Sorini' }],
-        subject: formData.subject
-      }],
-      from: { email: formData.email, name: formData.name },
-      reply_to: { email: formData.email, name: formData.name },
-      content: [{
-        type: 'text/plain',
-        value: formData.message
-      }]
-    };
-    
-    // Make the fetch request to SendGrid's API
-    return fetch('https://api.sendgrid.com/v3/mail/send', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${this.sendGridAPIKey}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(sendGridData)
-    })
-    .then(response => {
-      if (!response.ok) {
-        return response.json().then(data => {
-          throw new Error(data.errors ? data.errors[0].message : 'Failed to send email via SendGrid');
-        });
-      }
-      return { status: 'Email sent successfully via SendGrid' };
-    });
+    // Instead of directly calling SendGrid API with the key in client-side code,
+    // we'll use EmailJS which keeps the credentials server-side
+    return this.verifyEmailService()
+      .then(isReady => {
+        if (!isReady) {
+          throw new Error("Email service is not ready");
+        }
+        console.log("Sending email with data:", formData);
+        
+        // Use EmailJS to send the email - it will use your configured email service (can be SendGrid)
+        return window.emailjs.send(this.serviceID, this.templateID, formData, this.emailServiceKey);
+      });
   }
 
   setupEventListeners() {

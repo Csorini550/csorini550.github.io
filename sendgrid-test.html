@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SendGrid Test</title>
+    <title>Secure Email Test</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -62,16 +62,12 @@
     </style>
 </head>
 <body>
-    <h1>SendGrid Test Page</h1>
-    <p>This page is for testing SendGrid email functionality.</p>
+    <h1>Secure Email Test</h1>
+    <p>This page uses EmailJS as a secure proxy for sending emails (credentials are kept server-side).</p>
     
     <div id="status"></div>
     
     <form id="test-form">
-        <div class="form-group">
-            <label for="api-key">SendGrid API Key</label>
-            <input type="text" id="api-key" name="api-key" required value="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">
-        </div>
         <div class="form-group">
             <label for="name">Name</label>
             <input type="text" id="name" name="name" required value="Test User">
@@ -82,11 +78,11 @@
         </div>
         <div class="form-group">
             <label for="subject">Subject</label>
-            <input type="text" id="subject" name="subject" required value="SendGrid Test">
+            <input type="text" id="subject" name="subject" required value="Secure Email Test">
         </div>
         <div class="form-group">
             <label for="message">Message</label>
-            <textarea id="message" name="message" rows="5" required>This is a test of the SendGrid email API.</textarea>
+            <textarea id="message" name="message" rows="5" required>This is a secure test of the email system.</textarea>
         </div>
         <button type="submit">Test Send Email</button>
     </form>
@@ -95,6 +91,9 @@
         <h3>Debug Information</h3>
         <div id="debug-output"></div>
     </div>
+    
+    <!-- Include EmailJS -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     
     <script>
         // Debug logger function
@@ -107,9 +106,17 @@
             debugOutput.appendChild(logEntry);
         }
         
-        // Log when page is loaded
+        // Initialize EmailJS
         document.addEventListener('DOMContentLoaded', function() {
-            debugLog('SendGrid Test page loaded');
+            debugLog('Secure Email Test page loaded');
+            
+            try {
+                emailjs.init("zxeSmFLK-CuHM_mKO");
+                debugLog('Email service initialized successfully');
+            } catch (error) {
+                debugLog('Failed to initialize email service: ' + error.message, true);
+                showStatus('Email service initialization failed', 'error');
+            }
         });
         
         // Handle form submission
@@ -118,64 +125,48 @@
             debugLog('Form submitted');
             
             // Get form data
-            const apiKey = document.getElementById('api-key').value.trim();
             const name = document.getElementById('name').value.trim();
             const email = document.getElementById('email').value.trim();
             const subject = document.getElementById('subject').value.trim();
             const message = document.getElementById('message').value.trim();
             
-            if (!apiKey) {
-                showStatus('Please enter your SendGrid API key', 'error');
-                return;
-            }
-            
-            // Create SendGrid email data
-            const sendGridData = {
-                personalizations: [{
-                    to: [{ email: 'csorini13@gmail.com', name: 'Christopher Sorini' }],
-                    subject: subject
-                }],
-                from: { email: email, name: name },
-                reply_to: { email: email, name: name },
-                content: [{
-                    type: 'text/plain',
-                    value: message
-                }]
+            // Create email data
+            const emailData = {
+                name: name,
+                email: email,
+                subject: subject,
+                message: message,
+                to_name: "Christopher Sorini",
+                to_email: 'csorini13@gmail.com',
+                recipient: 'csorini13@gmail.com',
+                email_to: 'csorini13@gmail.com',
+                destination: 'csorini13@gmail.com',
+                toEmail: 'csorini13@gmail.com',
+                from_name: name,
+                reply_to: email
             };
             
-            debugLog('Sending email with data: ' + JSON.stringify(sendGridData, null, 2));
+            debugLog('Sending email with data: ' + JSON.stringify(emailData));
             
             // Disable button during sending
             const submitButton = document.querySelector('button[type="submit"]');
             submitButton.disabled = true;
             submitButton.textContent = 'Sending...';
             
-            // Send email using SendGrid API
-            fetch('https://api.sendgrid.com/v3/mail/send', {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${apiKey}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(sendGridData)
-            })
-            .then(response => {
-                if (!response.ok) {
-                    return response.json().then(data => {
-                        throw new Error(data.errors ? data.errors[0].message : 'Failed to send email via SendGrid');
-                    });
-                }
-                debugLog('Email sent successfully!');
-                showStatus('Email sent successfully! Check your inbox.', 'success');
-            })
-            .catch(error => {
-                debugLog('Email send failed: ' + error.message, true);
-                showStatus('Email send failed: ' + error.message, 'error');
-            })
-            .finally(() => {
-                submitButton.disabled = false;
-                submitButton.textContent = 'Test Send Email';
-            });
+            // Send email using EmailJS
+            emailjs.send('service_eh0jpbf', 'template_pplvcfl', emailData, 'zxeSmFLK-CuHM_mKO')
+                .then(function(response) {
+                    debugLog('Email sent successfully! Response: ' + JSON.stringify(response));
+                    showStatus('Email sent successfully! Check your inbox.', 'success');
+                })
+                .catch(function(error) {
+                    debugLog('Email send failed: ' + JSON.stringify(error), true);
+                    showStatus('Email send failed: ' + (error.text || 'Unknown error'), 'error');
+                })
+                .finally(function() {
+                    submitButton.disabled = false;
+                    submitButton.textContent = 'Test Send Email';
+                });
         });
         
         // Function to show status messages
