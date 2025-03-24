@@ -3,9 +3,11 @@ class Contact extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: 'open' });
+    console.log('Contact component initialized');
   }
 
   connectedCallback() {
+    console.log('Contact component connected to DOM');
     this.render();
     this.setupEventListeners();
     this.loadFontAwesome();
@@ -20,28 +22,35 @@ class Contact extends HTMLElement {
     
     // Append it to the shadow root
     this.shadowRoot.appendChild(link);
+    console.log('Font Awesome loaded');
   }
 
   loadEmailJS() {
-    // Create a script element for EmailJS
+    console.log('Attempting to load EmailJS');
+    
+    // Create a script element for EmailJS using the latest SDK
     const script = document.createElement('script');
-    script.src = 'https://cdn.emailjs.com/dist/email.min.js';
-    script.async = true;
+    script.src = 'https://cdn.emailjs.com/sdk/2.6.4/email.min.js';
+    script.type = 'text/javascript';
     
     // Initialize EmailJS when the script is loaded
     script.onload = () => {
-      // Initialize with your EmailJS public key
-      window.emailjs.init("zxeSmFLK-CuHM_mKO");
-      console.log("EmailJS initialized successfully");
+      try {
+        // Initialize with your EmailJS public key
+        emailjs.init("zxeSmFLK-CuHM_mKO");
+        console.log("EmailJS loaded and initialized successfully with public key: zxeSmFLK-CuHM_mKO");
+      } catch (error) {
+        console.error("Error initializing EmailJS:", error);
+      }
     };
     
     // Add error handling for script loading
-    script.onerror = () => {
-      console.error("Failed to load EmailJS script");
+    script.onerror = (error) => {
+      console.error("Failed to load EmailJS script", error);
     };
     
-    // Append it to the shadow root
-    this.shadowRoot.appendChild(script);
+    // Append it to document head instead of shadow DOM for global availability
+    document.head.appendChild(script);
   }
 
   render() {
@@ -325,6 +334,7 @@ class Contact extends HTMLElement {
                 </div>
                 <button type="submit" class="btn">Send Message</button>
               </form>
+              <div id="status-message" style="margin-top: 15px; padding: 10px; display: none;"></div>
             </div>
             <div class="contact-info" data-aos="fade-left">
               <div class="avatar-container">
@@ -370,8 +380,10 @@ class Contact extends HTMLElement {
   setupEventListeners() {
     const form = this.shadowRoot.querySelector('#contact-form');
     if (form) {
+      console.log('Form found and event listener set up');
       form.addEventListener('submit', (e) => {
         e.preventDefault();
+        console.log('Form submitted');
         
         // Show loading state
         const submitButton = form.querySelector('button[type="submit"]');
@@ -379,38 +391,43 @@ class Contact extends HTMLElement {
         submitButton.textContent = 'Sending...';
         submitButton.disabled = true;
         
+        // Display status message
+        const statusMessage = this.shadowRoot.querySelector('#status-message');
+        
         // Gather form data
-        const formData = new FormData(form);
-        const data = {
-          name: formData.get('name'),
-          email: formData.get('email'),
-          subject: formData.get('subject'),
-          message: formData.get('message'),
+        const formData = {
+          name: form.querySelector('#name').value,
+          email: form.querySelector('#email').value,
+          subject: form.querySelector('#subject').value,
+          message: form.querySelector('#message').value,
           to_email: 'csorini13@gmail.com'
         };
         
-        console.log("Attempting to send email with data:", data);
+        console.log("Attempting to send email with data:", formData);
         
-        // Make sure emailjs is available in the global scope
-        if (typeof window.emailjs === 'undefined') {
-          console.error("EmailJS is not loaded properly");
-          alert('Sorry, the email service is not loaded properly. Please try again later or contact me directly at csorini13@gmail.com.');
+        // Check if emailjs is accessible in the global scope
+        if (typeof emailjs === 'undefined') {
+          console.error("EmailJS is not loaded properly. emailjs is undefined");
+          this.showStatus(statusMessage, 'Sorry, the email service is not loaded properly. Please try again later or contact me directly at csorini13@gmail.com.', 'error');
           submitButton.textContent = originalButtonText;
           submitButton.disabled = false;
           return;
         }
         
+        console.log("EmailJS is available in global scope:", emailjs);
+        
         // Send email using EmailJS with the provided service ID and template ID
-        window.emailjs.send('service_eh0jpbf', 'template_ppvcfl', data)
+        emailjs.send('service_eh0jpbf', 'template_pplvcfl', formData)
           .then((response) => {
             console.log("Email sent successfully:", response);
             // Show success message
-            alert('Thank you for your message! I will get back to you soon.');
+            this.showStatus(statusMessage, 'Thank you for your message! I will get back to you soon.', 'success');
             form.reset();
           })
           .catch((error) => {
             console.error('Email send error:', error);
-            alert('Sorry, there was an error sending your message. Please try again or contact me directly at csorini13@gmail.com.');
+            console.error('Error details:', JSON.stringify(error));
+            this.showStatus(statusMessage, 'Sorry, there was an error sending your message. Please try again or contact me directly at csorini13@gmail.com.', 'error');
           })
           .finally(() => {
             // Reset button state
@@ -418,6 +435,24 @@ class Contact extends HTMLElement {
             submitButton.disabled = false;
           });
       });
+    } else {
+      console.error('Contact form not found in the shadow DOM');
+    }
+  }
+  
+  // Helper method to show status messages
+  showStatus(element, message, type) {
+    element.textContent = message;
+    element.style.display = 'block';
+    
+    if (type === 'success') {
+      element.style.backgroundColor = '#d4edda';
+      element.style.color = '#155724';
+      element.style.border = '1px solid #c3e6cb';
+    } else {
+      element.style.backgroundColor = '#f8d7da';
+      element.style.color = '#721c24';
+      element.style.border = '1px solid #f5c6cb';
     }
   }
 }
