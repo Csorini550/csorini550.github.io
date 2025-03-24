@@ -17,6 +17,58 @@
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <!-- Devicon - Tech Stack Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css">
+    <!-- EmailJS - with fallback mechanism -->
+    <script type="text/javascript">
+        (function() {
+            function loadEmailJS() {
+                // Try to load from CDN first
+                var script = document.createElement('script');
+                script.type = 'text/javascript';
+                script.src = 'https://cdn.emailjs.com/sdk/2.6.4/email.min.js';
+                
+                script.onload = function() {
+                    console.log("EmailJS CDN script loaded successfully");
+                    initEmailJS();
+                };
+                
+                script.onerror = function() {
+                    console.warn("Failed to load EmailJS from CDN, trying local fallback");
+                    
+                    // If CDN fails, try local version
+                    var fallbackScript = document.createElement('script');
+                    fallbackScript.type = 'text/javascript';
+                    fallbackScript.src = 'js/vendors/emailjs.min.js';
+                    
+                    fallbackScript.onload = function() {
+                        console.log("EmailJS local fallback loaded successfully");
+                        initEmailJS();
+                    };
+                    
+                    fallbackScript.onerror = function() {
+                        console.error("Both CDN and local EmailJS scripts failed to load");
+                    };
+                    
+                    document.head.appendChild(fallbackScript);
+                };
+                
+                document.head.appendChild(script);
+            }
+            
+            function initEmailJS() {
+                try {
+                    emailjs.init("zxeSmFLK-CuHM_mKO");
+                    console.log("EmailJS initialized in main HTML with public key: zxeSmFLK-CuHM_mKO");
+                    window.emailjsLoaded = true;
+                } catch (error) {
+                    console.error("Error initializing EmailJS in main HTML:", error);
+                    window.emailjsLoaded = false;
+                }
+            }
+            
+            // Start loading EmailJS
+            loadEmailJS();
+        })();
+    </script>
     <style>
         /* Basic reset and styles for the main page */
         * {
