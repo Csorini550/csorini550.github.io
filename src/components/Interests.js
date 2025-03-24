@@ -188,14 +188,6 @@ class Interests extends HTMLElement {
                 <p>Venturing to remote destinations, discovering natural beauty and challenging my limits.</p>
               </div>
             </div>
-            <div class="interest-item">
-              <img src="/src/images/travel.webp" alt="International travel destinations" class="interest-image">
-              <div class="interest-content">
-                <i class="fas fa-globe-americas"></i>
-                <h3>Travel</h3>
-                <p>Experiencing diverse cultures through travels to Italy, Spain, Thailand, and beyond.</p>
-              </div>
-            </div>
           </div>
         </div>
       </section>
