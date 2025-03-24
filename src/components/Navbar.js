@@ -162,6 +162,10 @@ class Navbar extends HTMLElement {
             z-index: 1000;
           }
           
+          .nav-links.active a {
+            color: #333;
+          }
+          
           .dropdown-content {
             position: static;
             box-shadow: none;
@@ -306,10 +310,17 @@ class Navbar extends HTMLElement {
 
   handleScroll() {
     const navbar = this.shadowRoot.querySelector('.navbar');
+    const navLinks = this.shadowRoot.querySelector('.nav-links');
+    
     if (window.scrollY > 100) {
       navbar.classList.add('scrolled');
     } else {
       navbar.classList.remove('scrolled');
+    }
+    
+    // Close the mobile menu when scrolling
+    if (navLinks.classList.contains('active')) {
+      navLinks.classList.remove('active');
     }
   }
 
