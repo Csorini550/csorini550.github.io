@@ -295,7 +295,7 @@ class About extends HTMLElement {
                   </div>
                 </div>
                 <div class="skill-item">
-                  <div class="skill-name">NVIDIA Echo System</div>
+                  <div class="skill-name">NVIDIA Ecosystem</div>
                   <div class="skill-bar" data-percentage="43">
                     <div class="skill-level"></div>
                   </div>
