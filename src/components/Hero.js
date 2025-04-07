@@ -976,7 +976,6 @@ class Hero extends HTMLElement {
 
   initTypewriter() {
     const phrases = [
-      "Dreaming up enterprise solutions with AI",
       "Building innovative digital solutions",
       "Turning complex problems into elegant code",
       "Bringing ideas to life through technology"
