@@ -246,7 +246,7 @@ class About extends HTMLElement {
               <p>My rigorous academic curriculum provided me with a deep understanding of scientific principles and technical skills, emphasizing research methodologies and analytical techniques.</p>
               
               <h3>Transition to Software Engineering</h3>
-              <p>Recognizing the growing importance of software in solving modern engineering challenges, I expanded my skill set at App Academy, an intensive coding bootcamp for full-stack web development with a highly selective <strong>3% acceptance rate</strong> (more competitive than Harvard).</p>
+              <p>Recognizing the growing importance of software in solving modern engineering challenges, I expanded my skill set at App Academy, an intensive coding bootcamp for full-stack web development with a highly selective <strong>3% acceptance rate</strong>.</p>
               <p>Through App Academy's rigorous 1000+ hour curriculum, I mastered JavaScript for developing dynamic web applications, HTML and CSS for responsive design, and Python for server-side logic and data manipulation. The program's focus on pair programming, test-driven development, and algorithmic problem-solving provided me with industry-ready skills that set me apart in the tech industry.</p>
             </div>
             <div class="about-skills" data-aos="fade-left">
