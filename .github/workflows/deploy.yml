@@ -30,23 +30,21 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '16'
+          node-version: '20'
           
       - name: Build site
         run: |
           # Create dist directory
           mkdir -p dist
           
-          # Copy all files from src to dist
-          cp -r src/* dist/
+          # Copy the entire src directory so paths like "src/js/app.js" resolve
+          cp -r src dist/src
           
           # Copy other necessary files
           cp index.html dist/
           
-          # Ensure all directories exist
-          mkdir -p dist/js
-          mkdir -p dist/css
-          mkdir -p dist/images
+          # (Optional) Add .nojekyll to bypass Jekyll processing (deploy action usually handles this)
+          touch dist/.nojekyll
       
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v2
